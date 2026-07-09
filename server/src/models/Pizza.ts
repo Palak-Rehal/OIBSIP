@@ -1,6 +1,24 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
-const pizzaSchema = new mongoose.Schema(
+interface IPizza extends Document {
+  name: string;
+  description: string;
+  category: string;
+  image: string;
+  rating: number;
+  totalReviews: number;
+  isFeatured: boolean;
+  isAvailable: boolean;
+  ingredients: string[];
+
+  sizes: {
+    size: "Small" | "Medium" | "Large";
+    price: number;
+  }[];
+   createdBy?: mongoose.Types.ObjectId;
+}
+
+const pizzaSchema = new mongoose.Schema<IPizza>(
   {
     name: {
       type: String,
@@ -12,12 +30,6 @@ const pizzaSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-    },
-
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
     },
 
     category: {
@@ -67,16 +79,18 @@ const pizzaSchema = new mongoose.Schema(
     ],
 
     sizes: [
-      {
-        name: {
-          type: String,
-        },
-        price: {
-          type: Number,
-        },
-      },
-    ],
-
+  {
+    size: {
+      type: String,
+      enum: ["Small", "Medium", "Large"],
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+  },
+],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -87,4 +101,4 @@ const pizzaSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Pizza", pizzaSchema);
+export default mongoose.model<IPizza>("Pizza", pizzaSchema);
