@@ -2,13 +2,19 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface IOrder extends Document {
   user: mongoose.Types.ObjectId;
-  items: mongoose.Types.ObjectId[];
+
+  items: {
+    pizza: mongoose.Types.ObjectId;
+    quantity: number;
+    size: string;
+    price: number;
+  }[];
+
   totalAmount: number;
   paymentMethod: string;
   paymentStatus: string;
   orderStatus: string;
 }
-
 const OrderSchema = new Schema<IOrder>(
   {
     user: {
@@ -18,11 +24,29 @@ const OrderSchema = new Schema<IOrder>(
     },
 
     items: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Cart",
-      },
-    ],
+  {
+    pizza: {
+      type: Schema.Types.ObjectId,
+      ref: "Pizza",
+      required: true,
+    },
+
+    quantity: {
+      type: Number,
+      required: true,
+    },
+
+    size: {
+      type: String,
+      required: true,
+    },
+
+    price: {
+      type: Number,
+      required: true,
+    },
+  },
+],
 
     totalAmount: {
       type: Number,
