@@ -39,22 +39,97 @@ export const getAllPizzas = async (
   res: Response
 ) => {
   try {
+    // Query Parameters
+    const search = req.query.search as string;
+    const category = req.query.category as string;
+    const sort = req.query.sort as string;
 
-    const pizzas = await Pizza.find();
+    const minPrice = Number(req.query.minPrice);
+    const maxPrice = Number(req.query.maxPrice);
+
+    const page = Math.max(1, Number(req.query.page) || 1);
+const limit = Math.max(1, Number(req.query.limit) || 10);
+
+    const skip = (page - 1) * limit;
+
+    // Filter Object
+    let query: any = {};
+
+    // Search by Pizza Name
+    if (search) {
+      query.name = {
+        $regex: search,
+        $options: "i",
+      };
+    }
+
+    // Category Filter
+    if (category) {
+      query.category = category;
+    }
+
+    // Price Filter
+    if (minPrice || maxPrice) {
+      query.price = {};
+
+      if (minPrice) {
+        query.price.$gte = minPrice;
+      }
+
+      if (maxPrice) {
+        query.price.$lte = maxPrice;
+      }
+    }
+
+    // Sorting
+    let sortOption: any = {};
+
+    switch (sort) {
+      case "price_asc":
+        sortOption.price = 1;
+        break;
+
+      case "price_desc":
+        sortOption.price = -1;
+        break;
+
+      case "rating":
+        sortOption.rating = -1;
+        break;
+
+      case "latest":
+        sortOption.createdAt = -1;
+        break;
+
+      default:
+        sortOption.createdAt = -1;
+    }
+
+    // Total Documents
+    const totalPizzas = await Pizza.countDocuments(query);
+
+    // Fetch Data
+    const pizzas = await Pizza.find(query)
+      .sort(sortOption)
+      .skip(skip)
+      .limit(limit);
 
     return res.status(200).json({
       success: true,
+      currentPage: page,
+      totalPages: Math.ceil(totalPizzas / limit),
+      totalPizzas,
       count: pizzas.length,
       pizzas,
     });
 
   } catch (error) {
+    console.error(error);
 
     return res.status(500).json({
       success: false,
       message: "Server Error",
     });
-
   }
 };
 export const getPizzaById = async (

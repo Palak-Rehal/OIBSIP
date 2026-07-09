@@ -1,20 +1,6 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose from "mongoose";
 
-export interface IPizza extends Document {
-  name: string;
-  description: string;
-  category: string;
-  image: string;
-  price: number;
-  sizes: string[];
-  ingredients: string[];
-  isVeg: boolean;
-  isAvailable: boolean;
-  rating: number;
-  totalReviews: number;
-}
-
-const PizzaSchema = new Schema<IPizza>(
+const pizzaSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -25,11 +11,25 @@ const PizzaSchema = new Schema<IPizza>(
     description: {
       type: String,
       required: true,
+      trim: true,
+    },
+
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
     },
 
     category: {
       type: String,
       required: true,
+      enum: [
+        "Veg",
+        "Non-Veg",
+        "Cheese Burst",
+        "Dessert",
+        "Beverages"
+      ],
     },
 
     image: {
@@ -37,26 +37,22 @@ const PizzaSchema = new Schema<IPizza>(
       required: true,
     },
 
-    price: {
+    rating: {
       type: Number,
-      required: true,
+      default: 0,
+      min: 0,
+      max: 5,
     },
 
-    sizes: [
-      {
-        type: String,
-      },
-    ],
+    totalReviews: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
 
-    ingredients: [
-      {
-        type: String,
-      },
-    ],
-
-    isVeg: {
+    isFeatured: {
       type: Boolean,
-      default: true,
+      default: false,
     },
 
     isAvailable: {
@@ -64,14 +60,26 @@ const PizzaSchema = new Schema<IPizza>(
       default: true,
     },
 
-    rating: {
-      type: Number,
-      default: 0,
-    },
+    ingredients: [
+      {
+        type: String,
+      },
+    ],
 
-    totalReviews: {
-      type: Number,
-      default: 0,
+    sizes: [
+      {
+        name: {
+          type: String,
+        },
+        price: {
+          type: Number,
+        },
+      },
+    ],
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   {
@@ -79,6 +87,4 @@ const PizzaSchema = new Schema<IPizza>(
   }
 );
 
-const Pizza = mongoose.model<IPizza>("Pizza", PizzaSchema);
-
-export default Pizza;
+export default mongoose.model("Pizza", pizzaSchema);
