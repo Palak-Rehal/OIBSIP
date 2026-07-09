@@ -7,12 +7,38 @@ import {
   deletePizza,
 } from "../controllers/pizza.controller";
 
+import authMiddleware from "../middleware/auth.middleware";
+import adminMiddleware from "../middleware/admin.middleware";
+import { pizzaValidation } from "../validations/pizza.validation";
+
 const router = Router();
 
+// Public Routes
 router.get("/", getAllPizzas);
 router.get("/:id", getPizzaById);
-router.post("/", createPizza);
-router.put("/:id", updatePizza);
-router.delete("/:id", deletePizza);
+
+// Admin Routes
+router.post(
+  "/",
+  authMiddleware,
+  adminMiddleware,
+  pizzaValidation,
+  createPizza
+);
+
+router.put(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  pizzaValidation,
+  updatePizza
+);
+
+router.delete(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  deletePizza
+);
 
 export default router;
