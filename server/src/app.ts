@@ -3,6 +3,7 @@ import pizzaRoutes from "./routes/pizza.routes";
 import authRoutes from "./routes/auth.routes";
 import cartRoutes from "./routes/cart.routes";
 import orderRoutes from "./routes/order.routes";
+import paymentRoutes from "./routes/payment.routes";
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.use("/api/pizzas", pizzaRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/payment", paymentRoutes);
+
 
 
 app.get("/", (req, res) => {
