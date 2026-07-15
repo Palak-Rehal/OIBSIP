@@ -7,7 +7,6 @@ export const createPizza = async (
   res: Response
 ) => {
   try {
-
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -25,13 +24,14 @@ export const createPizza = async (
       pizza,
     });
 
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Create Pizza Error:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Server Error",
+      message: error.message,
+      error,
     });
-
   }
 };
 export const getAllPizzas = async (
@@ -43,6 +43,7 @@ export const getAllPizzas = async (
     const search = req.query.search as string;
     const category = req.query.category as string;
     const sort = req.query.sort as string;
+    const featured = req.query.featured;
 
     const minPrice = Number(req.query.minPrice);
     const maxPrice = Number(req.query.maxPrice);
@@ -67,6 +68,10 @@ const limit = Math.max(1, Number(req.query.limit) || 10);
     if (category) {
       query.category = category;
     }
+
+    if (featured === "true") {
+  query.isFeatured = true;
+  }
 
     // Price Filter
     if (minPrice || maxPrice) {

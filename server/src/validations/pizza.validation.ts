@@ -9,10 +9,6 @@ export const pizzaValidation = [
     .notEmpty()
     .withMessage("Description is required"),
 
-  body("price")
-    .isFloat({ min: 1 })
-    .withMessage("Price must be greater than 0"),
-
   body("category")
     .notEmpty()
     .withMessage("Category is required"),
@@ -20,4 +16,12 @@ export const pizzaValidation = [
   body("image")
     .notEmpty()
     .withMessage("Image is required"),
+
+  body("sizes")
+    .isArray({ min: 1 })
+    .withMessage("At least one size is required"),
+
+  body("sizes.*.price")
+    .isFloat({ min: 1 })
+    .withMessage("Price must be greater than 0"),
 ];

@@ -1,14 +1,14 @@
 import dotenv from "dotenv";
 dotenv.config();
-console.log("Mongo URI:", process.env.MONGODB_URI);
+
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
 import app from "./app";
 import connectDB from "./config/db";
 
 const PORT = process.env.PORT || 5000;
 
 connectDB();
-
-
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);

@@ -7,7 +7,7 @@ export interface IReview extends Document {
   comment: string;
 }
 
-const ReviewSchema = new Schema<IReview>(
+const reviewSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -30,7 +30,8 @@ const ReviewSchema = new Schema<IReview>(
 
     comment: {
       type: String,
-      default: "",
+      required: true,
+      trim: true,
     },
   },
   {
@@ -38,4 +39,7 @@ const ReviewSchema = new Schema<IReview>(
   }
 );
 
-export default mongoose.model<IReview>("Review", ReviewSchema);
+// Prevent duplicate reviews from the same user
+reviewSchema.index({ user: 1, pizza: 1 }, { unique: true });
+
+export default mongoose.model<IReview>("Review", reviewSchema);
