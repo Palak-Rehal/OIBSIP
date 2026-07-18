@@ -23,6 +23,7 @@ const CategoryFilter = () => {
           px-4 sm:px-6 py-5
           flex gap-6 sm:gap-10
           overflow-x-auto
+          sm:flex-wrap sm:justify-center sm:overflow-visible
         "
       >
         {categories.map(({ label, icon: Icon, tint, text }) => {

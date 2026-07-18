@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ShoppingCart, Search, LogIn, Menu, X } from "lucide-react";
+import { ShoppingCart, Search, LogIn, Menu, X, Pizza } from "lucide-react";
 
 // Uses the same brand fonts as the hero — add once in your root layout:
 // <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,500;1,600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
@@ -19,22 +19,27 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 w-full z-50">
-      <nav className="relative w-full bg-[#FAF7F2] border-b border-[#E4DCCB]">
+      <nav className="relative w-full bg-[#F2ECDD] border-b border-[#DCD1B8]">
         <div className="max-w-7xl mx-auto flex justify-between items-center gap-4 px-5 sm:px-8 py-4">
 
           {/* Logo */}
-          <a href="#" className="flex items-baseline gap-1 shrink-0">
-            <span
-              className="text-[21px] sm:text-[24px] italic text-[#BD6A3C] leading-none"
-              style={{ fontFamily: "'Fraunces', serif", fontWeight: 600 }}
-            >
-              Pizza
+          <a href="#" className="flex items-center gap-2.5 shrink-0">
+            <span className="w-9 h-9 rounded-full bg-[#2E2B27] flex items-center justify-center shrink-0">
+              <Pizza size={17} className="text-[#F2ECDD]" strokeWidth={2} />
             </span>
-            <span
-              className="text-[21px] sm:text-[24px] italic text-[#2E2B27] leading-none"
-              style={{ fontFamily: "'Fraunces', serif", fontWeight: 600 }}
-            >
-              Hub
+            <span className="flex items-baseline gap-1">
+              <span
+                className="text-[21px] sm:text-[24px] italic text-[#BD6A3C] leading-none"
+                style={{ fontFamily: "'Fraunces', serif", fontWeight: 600 }}
+              >
+                Pizza
+              </span>
+              <span
+                className="text-[21px] sm:text-[24px] italic text-[#2E2B27] leading-none"
+                style={{ fontFamily: "'Fraunces', serif", fontWeight: 600 }}
+              >
+                Hub
+              </span>
             </span>
           </a>
 
@@ -66,7 +71,7 @@ const Navbar = () => {
               placeholder="Search pizza…"
               className="
                 w-full pl-10 pr-4 py-2.5 rounded-full
-                bg-white border border-[#E4DCCB]
+                bg-white border border-[#DCD1B8]
                 text-[13px] text-[#2E2B27] placeholder:text-[#A69D8C]
                 focus:outline-none focus:border-[#BD6A3C]
                 transition-colors
@@ -81,7 +86,7 @@ const Navbar = () => {
               aria-label="Cart"
               className="
                 relative w-9 h-9 sm:w-10 sm:h-10 rounded-full
-                border border-[#E4DCCB] bg-white
+                border border-[#DCD1B8] bg-white
                 text-[#4A463F]
                 hover:bg-[#BD6A3C] hover:border-[#BD6A3C] hover:text-white
                 transition-colors duration-200
@@ -97,7 +102,7 @@ const Navbar = () => {
                     bg-[#7C9473] text-white
                     text-[10px] font-bold
                     flex items-center justify-center
-                    border-2 border-[#FAF7F2]
+                    border-2 border-[#F2ECDD]
                   "
                 >
                   {cartCount}
@@ -109,7 +114,7 @@ const Navbar = () => {
               className="
                 hidden sm:flex items-center gap-2
                 px-4 py-2.5 rounded-full
-                border border-[#E4DCCB] bg-white
+                border border-[#DCD1B8] bg-white
                 text-[#2E2B27] text-[13px]
                 hover:border-[#BD6A3C] hover:text-[#BD6A3C]
                 transition-colors duration-200
@@ -126,7 +131,7 @@ const Navbar = () => {
               onClick={() => setOpen((v) => !v)}
               className="
                 md:hidden w-9 h-9 rounded-full
-                border border-[#E4DCCB] bg-white
+                border border-[#DCD1B8] bg-white
                 text-[#4A463F]
                 flex items-center justify-center shrink-0
               "
@@ -139,7 +144,7 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {open && (
-        <div className="w-full bg-[#FAF7F2] border-b border-[#E4DCCB] px-5 sm:px-8 py-5 md:hidden">
+        <div className="w-full bg-[#F2ECDD] border-b border-[#DCD1B8] px-5 sm:px-8 py-5 md:hidden">
           <div className="relative mb-5">
             <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A69D8C]" />
             <input
@@ -147,7 +152,7 @@ const Navbar = () => {
               placeholder="Search pizza…"
               className="
                 w-full pl-10 pr-4 py-2.5 rounded-full
-                bg-white border border-[#E4DCCB]
+                bg-white border border-[#DCD1B8]
                 text-[13px] text-[#2E2B27] placeholder:text-[#A69D8C]
                 focus:outline-none focus:border-[#BD6A3C]
               "
