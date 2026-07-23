@@ -29,6 +29,8 @@ const Home = () => {
       <DownloadApp />
 
       <Newsletter />
+
+      <Offers />
     </>
   );
 };

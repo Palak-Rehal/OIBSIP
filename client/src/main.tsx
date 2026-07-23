@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-
+import { CartProvider } from "./context/CartContext";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/Authcontext";
 
@@ -12,9 +12,11 @@ ReactDOM.createRoot(
 ).render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
+     <AuthProvider>
+    <CartProvider>
         <App />
-      </AuthProvider>
+    </CartProvider>
+    </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

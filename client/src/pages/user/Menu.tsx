@@ -1,10 +1,71 @@
-import SearchBar from "./SearchBar";
-import CategoryTabs from "./CategoryTabs";
-import FilterSidebar from "./FilterSidebar";
-import SortDropdown from "./SortDropdown";
-import PizzaGrid from "./PizzaGrid";
+import { useEffect, useState } from "react";
+
+import SearchBar from "../Menu/SearchBar";
+import CategoryTabs from "../Menu/CategoryTabs";
+import FilterSidebar from "../Menu/FilterSidebar";
+import SortDropdown from "../Menu/SortDropdown";
+import PizzaGrid from "../Menu/PizzaGrid";
+import { getAllPizzas } from "../../api/pizzaApi";
+
+interface Pizza {
+  _id: string;
+  name: string;
+  description: string;
+  image: string;
+  category: string;
+  rating: number;
+  totalReviews: number;
+  isFeatured: boolean;
+  isAvailable: boolean;
+  ingredients: string[];
+  sizes: {
+    size: string;
+    price: number;
+  }[];
+}
 
 const Menu = () => {
+  const [pizzas, setPizzas] = useState<Pizza[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("All");
+  const [sort, setSort] = useState("latest");
+
+  const [maxPrice, setMaxPrice] = useState(1000);
+const [featured, setFeatured] = useState(false);
+
+useEffect(() => {
+  fetchPizzas();
+}, [
+  search,
+  category,
+  sort,
+  maxPrice,
+  featured,
+]);
+
+  const fetchPizzas = async () => {
+    try {
+      setLoading(true);
+
+      const response = await getAllPizzas(
+        search,
+        category === "All" ? "" : category,
+        sort,
+         0,
+        maxPrice,
+        featured
+      );
+
+      setPizzas(response.data.pizzas || []);
+    } catch (error) {
+      console.error("Error fetching pizzas:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-[#FAF7F2] min-h-screen pt-28 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -15,30 +76,51 @@ const Menu = () => {
             Pizza Menu
           </h1>
 
-          <p className="text-gray-500 mt-2">
+          <p className="mt-2 text-gray-500">
             Fresh handmade pizzas prepared just for you.
           </p>
         </div>
 
-        <SearchBar />
-
+        {/* Search */}
+          <SearchBar
+          value={search}
+          onChange={setSearch}
+          />
+        {/* Categories */}
         <div className="mt-6">
-          <CategoryTabs />
+          <CategoryTabs
+            activeCategory={category}
+            onCategoryChange={setCategory}
+          />
         </div>
 
+        {/* Content */}
         <div className="mt-8 flex flex-col lg:flex-row gap-8">
 
+          {/* Sidebar */}
           <aside className="lg:w-72">
-            <FilterSidebar />
-          </aside>
+  <FilterSidebar
+    maxPrice={maxPrice}
+    featured={featured}
+    onPriceChange={setMaxPrice}
+    onFeaturedChange={setFeatured}
+  />
+</aside>
 
+          {/* Main */}
           <main className="flex-1">
 
-            <div className="flex justify-end mb-5">
-              <SortDropdown />
+            <div className="flex justify-end mb-6">
+              <SortDropdown
+                value={sort}
+                onChange={setSort}
+              />
             </div>
 
-            <PizzaGrid />
+            <PizzaGrid
+              pizzas={pizzas}
+              loading={loading}
+            />
 
           </main>
 

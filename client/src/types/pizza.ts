@@ -1,12 +1,25 @@
+export interface PizzaSize {
+  size: string;
+  price: number;
+}
+
 export interface Pizza {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   category: string;
-  price: number;
-  rating: number;
   image: string;
+
+  sizes: PizzaSize[];
+
   ingredients: string[];
-  bestseller: boolean;
-  veg: boolean;
+
+  rating: number;
+  totalReviews: number;
+
+  isFeatured: boolean;
+  isAvailable: boolean;
+
+  createdAt?: string;
+  updatedAt?: string;
 }

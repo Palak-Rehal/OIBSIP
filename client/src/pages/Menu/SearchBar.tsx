@@ -1,45 +1,73 @@
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 
-interface SearchBarProps {
-  value?: string;
-  onChange?: (value: string) => void;
+interface Props {
+  value: string;
+  onChange: (value: string) => void;
 }
 
-const SearchBar = ({ value = "", onChange }: SearchBarProps) => {
+const SearchBar = ({
+  value,
+  onChange,
+}: Props) => {
   return (
-    <div className="w-full">
-      <div className="relative">
+    <div className="relative w-full">
 
-        <Search
-          size={20}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-        />
+      <Search
+        size={20}
+        className="absolute left-5 top-1/2 -translate-y-1/2 text-[#BD6A3C]"
+      />
 
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => onChange?.(e.target.value)}
-          placeholder="Search your favourite pizza..."
+      <input
+        type="text"
+        value={value}
+        onChange={(e) =>
+          onChange(e.target.value)
+        }
+        placeholder="Search your favourite pizza..."
+        className="
+          w-full
+          h-16
+          rounded-full
+          bg-white
+          border
+          border-[#E7DED3]
+          pl-14
+          pr-14
+          text-lg
+          shadow-sm
+          transition-all
+          duration-300
+          focus:outline-none
+          focus:border-[#BD6A3C]
+          focus:shadow-lg
+          placeholder:text-gray-400
+        "
+      />
+
+      {value && (
+        <button
+          onClick={() => onChange("")}
           className="
-            w-full
-            h-14
-            rounded-2xl
-            border
-            border-[#E6DED2]
-            bg-white
-            pl-12
-            pr-4
-            text-[#2E2B27]
-            placeholder:text-gray-400
-            outline-none
-            transition-all
-            duration-200
-            focus:border-[#BD6A3C]
-            focus:ring-4
-            focus:ring-[#BD6A3C]/20
+            absolute
+            right-5
+            top-1/2
+            -translate-y-1/2
+            w-9
+            h-9
+            rounded-full
+            bg-[#FAF7F2]
+            hover:bg-[#BD6A3C]
+            hover:text-white
+            transition
+            flex
+            items-center
+            justify-center
           "
-        />
-      </div>
+        >
+          <X size={18} />
+        </button>
+      )}
+
     </div>
   );
 };
