@@ -1,5 +1,6 @@
 import { ShoppingBag, Truck, Receipt, BadgeIndianRupee } from "lucide-react";
 import { Link } from "react-router-dom";
+const IMAGE_URL = "http://localhost:5000";
 
 interface CartItem {
   _id: string;
@@ -49,7 +50,7 @@ const OrderSummary = ({
             className="flex items-center gap-4"
           >
             <img
-              src={item.pizza.image}
+              src={`${IMAGE_URL}${item.pizza.image}`}
               alt={item.pizza.name}
               className="w-16 h-16 rounded-2xl object-cover border"
             />

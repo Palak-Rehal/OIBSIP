@@ -87,9 +87,9 @@ const Testimonials = () => {
               {/* User */}
               <div className="flex items-center gap-4 mt-8">
                 <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-16 h-16 rounded-full object-cover border-2 border-[#BD6A3C]"
+                    src={item.image}
+                      alt={item.name}
+                    className="w-16 h-16 rounded-full object-cover border-2 border-[#BD6A3C]"
                 />
 
                 <div>

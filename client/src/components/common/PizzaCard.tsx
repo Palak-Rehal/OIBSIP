@@ -1,5 +1,6 @@
 import { Star } from "lucide-react";
 import { Link } from "react-router-dom";
+const IMAGE_URL = "http://localhost:5000";
 
 interface Pizza {
   _id: string;
@@ -26,7 +27,7 @@ const PizzaCard = ({ pizza }: PizzaCardProps) => {
 
       <div className="overflow-hidden">
         <img
-          src={pizza.image}
+           src={`${IMAGE_URL}${pizza.image}`}
           alt={pizza.name}
           className="w-full h-56 object-cover group-hover:scale-105 transition duration-300"
         />

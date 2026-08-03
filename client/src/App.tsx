@@ -8,7 +8,7 @@ import Menu from "./pages/user/Menu";
 import PizzaDetails from "./pages/user/PizzaDetails";
 import Cart from "./pages/user/Cart";
 import Checkout from "./pages/user/Checkout";
-
+import Offers from "./components/home/Offers";
 import Orders from "./pages/user/Orders";
 import OrderSummary from "./pages/user/OrderSummary";
 import OrderSuccess from "./pages/user/OrderSuccess";
@@ -16,9 +16,9 @@ import Login from "../src/pages/user/Login";
 import Register from "../src/pages/user/Register";
 import Profile from "../src/pages/user/Profile";
 import AddPizza from "./pages/admin/AddPizza";
-
-
-
+import Dashboard from "./pages/admin/Dashboard";
+import Contact from "./pages/user/Contact";
+import ForgotPassword from "./pages/user/ForgotPassword";
 
 
 
@@ -48,6 +48,10 @@ function App() {
           path="/cart"
           element={<Cart />}
         />
+        <Route
+            path="/contact"
+            element={<Contact />}
+          />
 
         {/* Checkout */}
         <Route
@@ -60,6 +64,10 @@ function App() {
           path="/order-success"
           element={<OrderSuccess />}
         />
+        <Route
+              path="/forgot-password"
+              element={<ForgotPassword />}
+            />
 
         {/* All Orders */}
         <Route
@@ -72,7 +80,7 @@ function App() {
           path="/orders/:id"
           element={<OrderSummary />}
         />
-      
+      <Route path="/offers" element={<Offers />} />
 <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<Profile />} />
@@ -80,7 +88,10 @@ function App() {
        path="/admin/add-pizza"
        element={<AddPizza />}
       />
-      
+      <Route
+ path="/admin/dashboard"
+ element={<Dashboard />}
+/>
       
       
       

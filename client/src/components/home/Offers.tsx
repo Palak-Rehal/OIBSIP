@@ -1,90 +1,74 @@
-import { TicketPercent, Clock3, Gift } from "lucide-react";
-
-const offers = [
-  {
-    title: "50% OFF",
-    subtitle: "On Your First Order",
-    description: "Use coupon NEW50",
-    icon: TicketPercent,
-    bg: "bg-[#FDE9DD]",
-    color: "text-[#BD6A3C]",
-  },
-  {
-    title: "Free Delivery",
-    subtitle: "Orders Above ₹499",
-    description: "Limited Time Offer",
-    icon: Clock3,
-    bg: "bg-[#EDF6EA]",
-    color: "text-[#5B8C5A]",
-  },
-  {
-    title: "Buy 1 Get 1",
-    subtitle: "Every Wednesday",
-    description: "Applicable on Medium Pizza",
-    icon: Gift,
-    bg: "bg-[#FFF4DA]",
-    color: "text-[#D18B00]",
-  },
-];
+import { FiPercent, FiTruck, FiGift } from "react-icons/fi";
 
 const Offers = () => {
+  const offers = [
+    {
+      icon: <FiPercent />,
+      title: "50% Off on First Order",
+      description:
+        "Enjoy a delicious pizza experience with an exclusive discount on your first purchase.",
+      code: "WELCOME50",
+    },
+    {
+      icon: <FiTruck />,
+      title: "Free Delivery",
+      description:
+        "Get free delivery on orders above ₹499. Hot pizza delivered to your doorstep.",
+      code: "FREEDEL",
+    },
+    {
+      icon: <FiGift />,
+      title: "Combo Offers",
+      description:
+        "Grab exciting pizza combos with sides and beverages at special prices.",
+      code: "COMBO25",
+    },
+  ];
+
   return (
-    <section className="bg-[#FAF7F2] py-20">
-      <div className="max-w-7xl mx-auto px-5 sm:px-6">
+    <section className="min-h-screen bg-[#fffaf4] pt-32 pb-16 px-6">
+      <div className="max-w-6xl mx-auto text-center">
 
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-[#2E2B27]">
-            Today's Offers
-          </h2>
+        <h1 className="text-5xl font-bold text-[#2b2118]">
+          Special <span className="text-[#d97745]">Offers</span>
+        </h1>
 
-          <p className="text-gray-500 mt-3">
-            Save more on every delicious bite.
-          </p>
-        </div>
+        <p className="mt-4 text-gray-600 text-lg">
+          Enjoy amazing deals and delicious pizzas at unbeatable prices.
+        </p>
 
-        <div className="grid gap-6 md:grid-cols-3">
 
-          {offers.map((offer) => {
-            const Icon = offer.icon;
+        <div className="grid md:grid-cols-3 gap-8 mt-12">
 
-            return (
-              <div
-                key={offer.title}
-                className={`${offer.bg}
-                rounded-3xl
-                p-8
-                shadow-sm
-                hover:shadow-xl
-                transition-all
-                duration-300
-                hover:-translate-y-2`}
-              >
-                <div
-                  className={`w-16 h-16 rounded-full bg-white flex items-center justify-center ${offer.color}`}
-                >
-                  <Icon size={30} />
-                </div>
+          {offers.map((offer, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-3xl p-8 shadow-lg hover:-translate-y-2 transition"
+            >
 
-                <h3 className="mt-6 text-3xl font-bold text-[#2E2B27]">
-                  {offer.title}
-                </h3>
-
-                <p className="mt-2 font-semibold text-lg">
-                  {offer.subtitle}
-                </p>
-
-                <p className="text-gray-500 mt-2">
-                  {offer.description}
-                </p>
-
-                <button
-                  className="mt-6 bg-[#2E2B27] text-white px-6 py-3 rounded-full hover:bg-[#BD6A3C] transition"
-                >
-                  Order Now
-                </button>
+              <div className="text-4xl text-[#d97745] flex justify-center">
+                {offer.icon}
               </div>
-            );
-          })}
+
+              <h2 className="text-2xl font-bold mt-5 text-[#2b2118]">
+                {offer.title}
+              </h2>
+
+              <p className="text-gray-600 mt-3">
+                {offer.description}
+              </p>
+
+
+              <div className="mt-6 bg-[#fff1e7] rounded-xl py-3 font-bold text-[#d97745]">
+                Code: {offer.code}
+              </div>
+
+              <button className="mt-6 bg-[#d97745] text-white px-6 py-3 rounded-full hover:bg-[#c56535] transition">
+                Order Now
+              </button>
+
+            </div>
+          ))}
 
         </div>
 

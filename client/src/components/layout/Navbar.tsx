@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { ShoppingCart, Search, LogIn, Menu, X, Pizza, User } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/Authcontext";
+import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
-// import { useCart } from "../../context/CartContext"; // Uncomment after creating CartContext
+import { getAllPizzas } from "../../api/pizzaApi";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [suggestions, setSuggestions] = useState<any[]>([]);
 
   const navigate = useNavigate();
 
@@ -32,12 +33,59 @@ const Navbar = () => {
     { name: "Contact", path: "/contact" },
   ];
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && search.trim()) {
-      navigate(`/menu?search=${search}`);
-      setOpen(false);
+  const handleSearch = (
+  e: React.KeyboardEvent<HTMLInputElement>
+) => {
+  if (e.key !== "Enter") return;
+
+  searchPizza();
+};
+useEffect(() => {
+
+  const loadSuggestions = async () => {
+
+    if (!search.trim()) {
+      setSuggestions([]);
+      return;
     }
+
+    try {
+
+      const res = await getAllPizzas(
+        search,
+        "",
+        "latest",
+        0,
+        1000,
+        false
+      );
+
+      setSuggestions(res.data.pizzas.slice(0,5));
+
+    } catch {
+
+      setSuggestions([]);
+
+    }
+
   };
+
+  const timer = setTimeout(loadSuggestions,300);
+
+  return ()=>clearTimeout(timer);
+
+},[search]);
+
+
+    const searchPizza = () => {
+  if (!search.trim()) return;
+
+  navigate(
+    `/menu?search=${encodeURIComponent(search.trim())}`
+  );
+
+  setOpen(false);
+};
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-md">
@@ -108,24 +156,62 @@ const Navbar = () => {
           </ul>
                     {/* Desktop Search */}
 
-          <div className="hidden lg:flex items-center flex-1 max-w-[250px] relative">
+<div className="hidden lg:flex items-center flex-1 max-w-[330px] gap-2">
 
-            <Search
-              size={16}
-              className="absolute left-4 text-[#A69D8C]"
-            />
+  <div className="relative flex-1">
 
-            <input
-              type="text"
-              placeholder="Search pizza..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={handleSearch}
-              className="w-full pl-11 pr-4 py-3 rounded-full border border-[#DCD1B8] bg-white text-sm text-[#2E2B27] placeholder:text-[#A69D8C] focus:outline-none focus:border-[#BD6A3C] focus:ring-4 focus:ring-[#BD6A3C]/20 transition-all duration-300"
-              style={{ fontFamily: "'Manrope', sans-serif" }}
-            />
+    <Search
+      size={16}
+      className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A69D8C]"
+    />
 
-          </div>
+    <input
+      type="text"
+      placeholder="Search pizza..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      onKeyDown={handleSearch}
+      className="w-full pl-11 pr-4 py-3 rounded-full border border-[#DCD1B8] bg-white text-sm text-[#2E2B27] placeholder:text-[#A69D8C] focus:outline-none focus:border-[#BD6A3C] focus:ring-4 focus:ring-[#BD6A3C]/20 transition-all duration-300"
+    />
+    {
+suggestions.length > 0 && (
+
+<div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border z-50">
+
+{suggestions.map((pizza)=>(
+<Link
+key={pizza._id}
+to={`/pizza/${pizza._id}`}
+onClick={()=>{
+
+setSearch("");
+
+setSuggestions([]);
+
+}}
+className="block px-4 py-3 hover:bg-[#FAF7F2]"
+>
+
+{pizza.name}
+
+</Link>
+))}
+
+</div>
+
+)
+}
+
+  </div>
+
+  <button
+    onClick={searchPizza}
+    className="px-5 py-3 rounded-full bg-[#BD6A3C] text-white font-semibold hover:bg-[#a95731] transition"
+  >
+    Search
+  </button>
+
+</div>
 
           {/* Right Side */}
 

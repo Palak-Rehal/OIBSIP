@@ -1,57 +1,130 @@
-import { CreditCard, Wallet } from "lucide-react";
+import { useState } from "react";
+import {
+  CreditCard,
+  Wallet,
+  Banknote,
+  CheckCircle2,
+} from "lucide-react";
 
-interface Props {
-  payment: string;
-  setPayment: (value: string) => void;
-}
+const PaymentMethod = () => {
+  const [method, setMethod] = useState("cod");
 
-const PaymentMethod = ({ payment, setPayment }: Props) => {
+  const payments = [
+    {
+      id: "cod",
+      title: "Cash on Delivery",
+      description: "Pay when your order arrives.",
+      icon: <Banknote size={24} />,
+    },
+    {
+      id: "card",
+      title: "Credit / Debit Card",
+      description: "Visa, Mastercard, RuPay supported.",
+      icon: <CreditCard size={24} />,
+    },
+    {
+      id: "upi",
+      title: "UPI / Wallet",
+      description: "Google Pay, PhonePe, Paytm, BHIM.",
+      icon: <Wallet size={24} />,
+    },
+  ];
+
   return (
-    <div className="bg-white rounded-3xl shadow-lg border border-[#E8DED3] p-8 mt-8">
+    <div className="space-y-5">
 
-      <h2 className="text-2xl font-bold mb-6">
-        Payment Method
-      </h2>
+      {payments.map((item) => (
 
-      <div className="space-y-4">
+        <label
+          key={item.id}
+          className={`
+            relative
+            flex
+            items-center
+            justify-between
+            p-5
+            rounded-2xl
+            border-2
+            cursor-pointer
+            transition-all
+            duration-300
 
-        <label className={`flex items-center justify-between border rounded-2xl p-5 cursor-pointer transition ${payment === "COD" ? "border-[#BD6A3C] bg-[#FFF5EE]" : "border-gray-200"}`}>
-          <div className="flex items-center gap-4">
-            <Wallet className="text-[#BD6A3C]" />
-            <div>
-              <p className="font-semibold">Cash On Delivery</p>
-              <p className="text-sm text-gray-500">
-                Pay when your pizza arrives.
-              </p>
+            ${
+              method === item.id
+                ? "border-[#BD6A3C] bg-[#FFF7F2]"
+                : "border-[#ECE5DA] bg-white hover:border-[#BD6A3C]"
+            }
+          `}
+        >
+
+          <div className="flex items-center gap-5">
+
+            <div
+              className={`
+                w-14
+                h-14
+                rounded-2xl
+                flex
+                items-center
+                justify-center
+
+                ${
+                  method === item.id
+                    ? "bg-[#BD6A3C] text-white"
+                    : "bg-[#F5F5F5] text-[#BD6A3C]"
+                }
+              `}
+            >
+              {item.icon}
             </div>
+
+            <div>
+
+              <h3 className="font-bold text-lg text-[#2E2B27]">
+                {item.title}
+              </h3>
+
+              <p className="text-gray-500 text-sm">
+                {item.description}
+              </p>
+
+            </div>
+
           </div>
 
-          <input
-            type="radio"
-            checked={payment === "COD"}
-            onChange={() => setPayment("COD")}
-          />
-        </label>
+          <div>
 
-        <label className={`flex items-center justify-between border rounded-2xl p-5 cursor-pointer transition ${payment === "ONLINE" ? "border-[#BD6A3C] bg-[#FFF5EE]" : "border-gray-200"}`}>
-          <div className="flex items-center gap-4">
-            <CreditCard className="text-[#7C9473]" />
-            <div>
-              <p className="font-semibold">
-                Credit / Debit Card
-              </p>
-              <p className="text-sm text-gray-500">
-                Razorpay / Stripe (Coming Soon)
-              </p>
-            </div>
+            <input
+              type="radio"
+              checked={method === item.id}
+              onChange={() => setMethod(item.id)}
+              className="hidden"
+            />
+
+            {method === item.id && (
+              <CheckCircle2
+                size={28}
+                className="text-[#BD6A3C]"
+              />
+            )}
+
           </div>
 
-          <input
-            type="radio"
-            checked={payment === "ONLINE"}
-            onChange={() => setPayment("ONLINE")}
-          />
         </label>
+
+      ))}
+
+      <div className="bg-[#FFF7F2] rounded-2xl p-5 mt-6">
+
+        <h3 className="font-bold text-[#2E2B27]">
+          Secure Payments
+        </h3>
+
+        <p className="text-gray-500 mt-2">
+          All transactions are encrypted using industry-standard
+          security. Your payment information is protected at every
+          step.
+        </p>
 
       </div>
 

@@ -1,5 +1,6 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "../../context/CartContext";
+const IMAGE_URL = "http://localhost:5000";
 
 interface Props {
   item: any;
@@ -39,8 +40,8 @@ const CartItem = ({ item }: Props) => {
     <div className="bg-white rounded-3xl border border-[#E7DED3] shadow-md p-6 flex flex-col md:flex-row gap-6">
 
       <img
-        src={item.pizza.image}
-        alt={item.pizza.name}
+        src={`${IMAGE_URL}${item.pizza.image}`}
+      alt={item.pizza.name}
         className="w-40 h-40 object-contain mx-auto md:mx-0"
       />
 

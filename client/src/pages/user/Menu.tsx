@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import SearchBar from "../Menu/SearchBar";
 import CategoryTabs from "../Menu/CategoryTabs";
@@ -25,18 +26,45 @@ interface Pizza {
 }
 
 const Menu = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const urlSearch = searchParams.get("search") || "";
+  const urlCategory = searchParams.get("category") || "All";
+  const urlSort = searchParams.get("sort") || "latest";
+
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-  const [sort, setSort] = useState("latest");
+  const [search, setSearch] = useState(urlSearch);
+  const [category, setCategory] = useState(urlCategory);
+  const [sort, setSort] = useState(urlSort);
 
   const [maxPrice, setMaxPrice] = useState(1000);
-const [featured, setFeatured] = useState(false);
+  const [featured, setFeatured] = useState(false);
 
 useEffect(() => {
-  fetchPizzas();
+  const load = async () => {
+    try {
+      setLoading(true);
+
+      const response = await getAllPizzas(
+        search,
+        category === "All" ? "" : category,
+        sort,
+        0,
+        maxPrice,
+        featured
+      );
+
+      setPizzas(response.data.pizzas || []);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  load();
 }, [
   search,
   category,
@@ -45,26 +73,9 @@ useEffect(() => {
   featured,
 ]);
 
-  const fetchPizzas = async () => {
-    try {
-      setLoading(true);
-
-      const response = await getAllPizzas(
-        search,
-        category === "All" ? "" : category,
-        sort,
-         0,
-        maxPrice,
-        featured
-      );
-
-      setPizzas(response.data.pizzas || []);
-    } catch (error) {
-      console.error("Error fetching pizzas:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+  setSearch(urlSearch);
+}, [urlSearch]);
 
   return (
     <div className="bg-[#FAF7F2] min-h-screen pt-28 pb-16">
@@ -83,15 +94,31 @@ useEffect(() => {
 
         {/* Search */}
           <SearchBar
-          value={search}
-          onChange={setSearch}
-          />
+         value={search}
+         onChange={(value) => {
+        setSearch(value);
+
+      setSearchParams({
+            search: value,
+            category,
+             sort,
+            });
+          }}
+        />
         {/* Categories */}
         <div className="mt-6">
           <CategoryTabs
-            activeCategory={category}
-            onCategoryChange={setCategory}
-          />
+  activeCategory={category}
+  onCategoryChange={(value) => {
+    setCategory(value);
+
+      setSearchParams({
+                search,
+                category: value,
+                sort,
+               });
+              }}
+            />
         </div>
 
         {/* Content */}
@@ -112,9 +139,17 @@ useEffect(() => {
 
             <div className="flex justify-end mb-6">
               <SortDropdown
-                value={sort}
-                onChange={setSort}
-              />
+  value={sort}
+  onChange={(value) => {
+    setSort(value);
+
+    setSearchParams({
+      search,
+      category,
+      sort: value,
+    });
+  }}
+/>
             </div>
 
             <PizzaGrid

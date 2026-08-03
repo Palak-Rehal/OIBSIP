@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, Pizza } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -23,16 +24,19 @@ const Login = () => {
   };
 
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    console.log(formData);
+  try {
+    await login(formData);
 
-    // connect login API here
-    // after successful login:
-     navigate("/");
-
-  };
+    navigate("/");
+  } catch (error: any) {
+    alert(
+      error.response?.data?.message || "Login failed"
+    );
+  }
+};
 
 
   return (

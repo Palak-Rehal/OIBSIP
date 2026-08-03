@@ -4,7 +4,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-
+const IMAGE_URL = "http://localhost:5000";
 interface Props {
   order: any;
 }
@@ -85,8 +85,8 @@ const OrderCard = ({ order }: Props) => {
               <div className="flex items-center gap-4">
 
                 <img
-                  src={item.pizza.image}
-                  alt={item.pizza.name}
+                src={`${IMAGE_URL}${item.pizza.image}`}
+                alt={item.pizza.name}
                   className="w-16 h-16 rounded-xl object-cover border border-[#E7DED3]"
                 />
 

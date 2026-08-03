@@ -11,7 +11,7 @@ import {
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import type { Pizza } from "../../types/pizza";
-
+const IMAGE_URL = "http://localhost:5000";
 interface Props {
   pizza: Pizza;
 }
@@ -45,7 +45,7 @@ const PizzaCard = ({ pizza }: Props) => {
       <div className="relative bg-[#FAF7F2]">
 
         <img
-          src={pizza.image}
+          src={`${IMAGE_URL}${pizza.image}`}
           alt={pizza.name}
           className="
           w-full

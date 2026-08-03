@@ -1,15 +1,24 @@
 import { useState } from "react";
 
+const IMAGE_URL = "http://localhost:5000";
+
 interface Props {
   image: string;
   name: string;
 }
 
 const PizzaGallery = ({ image, name }: Props) => {
-  const [selected, setSelected] = useState(image);
+  const fullImage = `${IMAGE_URL}${image}`;
+
+  const [selected, setSelected] = useState(fullImage);
 
   // Temporary thumbnails
-  const images = [image, image, image, image];
+  const images = [
+    fullImage,
+    fullImage,
+    fullImage,
+    fullImage,
+  ];
 
   return (
     <div className="space-y-5">
@@ -52,13 +61,11 @@ const PizzaGallery = ({ image, name }: Props) => {
               overflow-hidden
               border-2
               transition
-
               ${
                 selected === img
                   ? "border-[#BD6A3C]"
                   : "border-[#E7DED3]"
               }
-
               hover:border-[#BD6A3C]
             `}
           >

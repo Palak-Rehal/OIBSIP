@@ -1,5 +1,5 @@
+import { ArrowRight, BadgePercent, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
-import { CreditCard, ShieldCheck, Truck } from "lucide-react";
 
 interface Props {
   subtotal: number;
@@ -15,46 +15,49 @@ const CartSummary = ({
   total,
 }: Props) => {
   return (
-    <div className="sticky top-28 h-fit rounded-3xl border border-[#E7DED3] bg-white p-8 shadow-xl">
+    <div
+      className="
+        sticky
+        top-28
+        bg-white
+        rounded-3xl
+        shadow-xl
+        border
+        border-[#EFE6DB]
+        p-7
+        h-fit
+      "
+    >
+      {/* Heading */}
 
-      <h2 className="mb-8 text-3xl font-black text-[#2E2B27]">
+      <h2 className="text-2xl font-black text-[#2E2B27]">
         Order Summary
       </h2>
 
-      <div className="space-y-5">
+      <p className="text-gray-500 mt-2">
+        Review your order before checkout.
+      </p>
 
-        <div className="flex items-center justify-between text-gray-600">
-          <span>Subtotal</span>
-          <span className="font-semibold">
-            ₹{subtotal}
-          </span>
-        </div>
+      {/* Coupon */}
 
-        <div className="flex items-center justify-between text-gray-600">
-          <span>Delivery Fee</span>
-          <span className="font-semibold">
-            ₹{delivery}
-          </span>
-        </div>
+      <div className="mt-8 bg-[#FFF5ED] rounded-2xl p-4 border border-[#F6D6C1]">
 
-        <div className="flex items-center justify-between text-gray-600">
-          <span>GST (5%)</span>
-          <span className="font-semibold">
-            ₹{gst}
-          </span>
-        </div>
+        <div className="flex items-center gap-3">
 
-        <div className="border-t border-dashed border-[#E7DED3] pt-5">
+          <BadgePercent
+            className="text-[#BD6A3C]"
+            size={22}
+          />
 
-          <div className="flex items-center justify-between">
+          <div>
 
-            <span className="text-2xl font-black text-[#2E2B27]">
-              Total
-            </span>
+            <h3 className="font-bold text-[#2E2B27]">
+              Apply Coupon
+            </h3>
 
-            <span className="text-3xl font-black text-[#BD6A3C]">
-              ₹{total}
-            </span>
+            <p className="text-sm text-gray-500">
+              Save more on today's order.
+            </p>
 
           </div>
 
@@ -62,38 +65,134 @@ const CartSummary = ({
 
       </div>
 
-      <Link
-        to="/checkout"
-        className="mt-8 flex h-14 w-full items-center justify-center gap-3 rounded-full bg-[#BD6A3C] text-lg font-bold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#A85A2F]"
-      >
-        <CreditCard size={20} />
-        Proceed to Checkout
-      </Link>
+      {/* Price Details */}
 
-      <div className="mt-8 space-y-4 rounded-2xl bg-[#FAF7F2] p-5">
+      <div className="mt-8 space-y-5">
 
-        <div className="flex items-center gap-3 text-gray-700">
-          <Truck size={18} className="text-[#BD6A3C]" />
-          <div>
-            <p className="font-semibold">
-              Fast Delivery
-            </p>
-            <p className="text-sm text-gray-500">
-              Estimated arrival in 20–30 minutes
-            </p>
-          </div>
+        <div className="flex justify-between">
+
+          <span className="text-gray-600">
+            Subtotal
+          </span>
+
+          <span className="font-bold">
+            ₹{subtotal}
+          </span>
+
         </div>
 
-        <div className="flex items-center gap-3 text-gray-700">
-          <ShieldCheck size={18} className="text-green-600" />
+        <div className="flex justify-between">
+
+          <span className="flex items-center gap-2 text-gray-600">
+
+            <Truck size={17} />
+
+            Delivery
+
+          </span>
+
+          <span className="font-bold">
+            ₹{delivery}
+          </span>
+
+        </div>
+
+        <div className="flex justify-between">
+
+          <span className="text-gray-600">
+            GST (5%)
+          </span>
+
+          <span className="font-bold">
+            ₹{gst}
+          </span>
+
+        </div>
+
+        <hr />
+
+        <div className="flex justify-between">
+
+          <span className="text-xl font-black">
+            Total
+          </span>
+
+          <span className="text-2xl font-black text-[#BD6A3C]">
+            ₹{total}
+          </span>
+
+        </div>
+
+      </div>
+
+      {/* Checkout */}
+
+      <Link
+        to="/checkout"
+        className="
+          mt-8
+          w-full
+          h-14
+          rounded-full
+          bg-[#BD6A3C]
+          hover:bg-[#A95B32]
+          transition
+          text-white
+          font-bold
+          flex
+          items-center
+          justify-center
+          gap-2
+        "
+      >
+        Proceed to Checkout
+
+        <ArrowRight size={18} />
+
+      </Link>
+
+      {/* Trust Badges */}
+
+      <div className="mt-8 border-t pt-6">
+
+        <div className="flex justify-between text-center">
+
           <div>
-            <p className="font-semibold">
-              Secure Payment
+
+            <p className="font-bold text-[#2E2B27]">
+              100%
             </p>
-            <p className="text-sm text-gray-500">
-              100% safe and encrypted checkout
+
+            <p className="text-xs text-gray-500">
+              Secure
             </p>
+
           </div>
+
+          <div>
+
+            <p className="font-bold text-[#2E2B27]">
+              30 min
+            </p>
+
+            <p className="text-xs text-gray-500">
+              Delivery
+            </p>
+
+          </div>
+
+          <div>
+
+            <p className="font-bold text-[#2E2B27]">
+              Fresh
+            </p>
+
+            <p className="text-xs text-gray-500">
+              Handmade
+            </p>
+
+          </div>
+
         </div>
 
       </div>
