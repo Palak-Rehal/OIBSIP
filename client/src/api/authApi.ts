@@ -18,4 +18,18 @@ export const getProfile = () =>
 export const updateProfile = (data: {
   name?: string;
   phone?: string;
+  address?: string;
 }) => API.put("/auth/profile", data);
+
+// Forgot Password
+export const forgotPassword = (email: string) =>
+  API.post("/auth/forgot-password", { email });
+
+// Reset Password
+export const resetPassword = (
+  token: string,
+  password: string
+) =>
+  API.put(`/auth/reset-password/${token}`, {
+    password,
+  });

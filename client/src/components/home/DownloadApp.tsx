@@ -1,4 +1,9 @@
 import { Apple, PlayCircle, Star } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
+
+// Replace with your real app download link (e.g. a smart link that
+// detects iOS/Android and redirects to the right store).
+const APP_DOWNLOAD_URL = "#";
 
 const DownloadApp = () => {
   return (
@@ -47,6 +52,27 @@ const DownloadApp = () => {
               <span className="text-[13px] font-bold text-[#2E2B27]">4.8</span>
             </div>
             <span className="text-[12px] text-[#8A8477]">· 10k+ downloads</span>
+          </div>
+
+          {/* QR code — scan to download */}
+          <div className="flex items-center gap-4 mt-7 bg-white/70 rounded-2xl px-4 py-3 w-fit">
+            <div className="bg-white p-1 rounded-lg">
+              <QRCodeSVG
+                value={APP_DOWNLOAD_URL}
+                size={76}
+                bgColor="#FFFFFF"
+                fgColor="#2E2B27"
+                level="M"
+              />
+            </div>
+            <div>
+              <p className="text-[13px] font-bold text-[#2E2B27]">
+                Scan to download
+              </p>
+              <p className="text-[11px] text-[#8A8477] max-w-[150px] mt-0.5">
+                Point your camera at the code to get the app.
+              </p>
+            </div>
           </div>
         </div>
 

@@ -1,104 +1,188 @@
-import { CheckCircle2, ShoppingBag, Home } from "lucide-react";
-import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { CheckCircle2, Package, Home } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+interface OrderState {
+  orderId?: string;
+}
 
 const OrderSuccess = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const state = location.state as OrderState | null;
+
+  const orderId = state?.orderId;
+
   return (
-    <section className="min-h-screen bg-[#FAF7F2] flex items-center justify-center px-5 py-20">
-
-      <div className="max-w-xl w-full bg-white rounded-[32px] border border-[#E7DED3] shadow-xl p-10 text-center">
-
+    <div
+      className="
+        min-h-screen
+        w-full
+        bg-[#faf7f2]
+        pt-[115px]
+        pb-10
+        px-4
+        flex
+        justify-center
+        items-start
+      "
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 25, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        className="
+          w-full
+          max-w-[520px]
+          bg-white
+          rounded-[28px]
+          border
+          border-[#eadfd3]
+          shadow-[0_18px_50px_rgba(45,35,25,0.12)]
+          px-7
+          py-8
+          text-center
+        "
+      >
         {/* Success Icon */}
-
-        <div className="w-28 h-28 rounded-full bg-green-100 flex items-center justify-center mx-auto">
-
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{
+            delay: 0.15,
+            type: "spring",
+            stiffness: 180,
+          }}
+          className="
+            mx-auto
+            w-16
+            h-16
+            rounded-full
+            bg-green-50
+            flex
+            items-center
+            justify-center
+            mb-5
+          "
+        >
           <CheckCircle2
-            size={70}
-            className="text-green-600"
+            size={46}
+            strokeWidth={2.2}
+            className="text-green-500"
           />
+        </motion.div>
 
-        </div>
-
-        {/* Heading */}
-
-        <h1 className="mt-8 text-4xl font-black text-[#2E2B27]">
-          Order Placed Successfully!
+        {/* Title */}
+        <h1
+          className="
+            text-3xl
+            md:text-4xl
+            font-black
+            text-[#292724]
+            tracking-tight
+          "
+        >
+          Order Placed!
         </h1>
 
-        <p className="mt-5 text-gray-600 leading-8">
-          Thank you for choosing
-          <span className="font-bold text-[#BD6A3C]">
-            {" "}PizzaHub
-          </span>
-          .
+        {/* Description */}
+        <p
+          className="
+            mt-3
+            text-[15px]
+            md:text-base
+            text-[#756f69]
+            leading-relaxed
+            max-w-[390px]
+            mx-auto
+          "
+        >
+          Thank you for ordering from PizzaHub.
           <br />
-          Your delicious pizza is now being prepared by our chefs.
+          Your delicious pizza is being prepared.
         </p>
 
-        {/* Order Details */}
-
-        <div className="mt-10 bg-[#FAF7F2] rounded-2xl border border-[#E7DED3] p-6">
-
-          <div className="flex justify-between py-3">
-            <span className="text-gray-500">
-              Order Status
-            </span>
-
-            <span className="font-bold text-yellow-600">
-              Preparing
-            </span>
-          </div>
-
-          <hr />
-
-          <div className="flex justify-between py-3">
-            <span className="text-gray-500">
-              Estimated Delivery
-            </span>
-
-            <span className="font-bold">
-              20 - 30 Minutes
-            </span>
-          </div>
-
-          <hr />
-
-          <div className="flex justify-between py-3">
-            <span className="text-gray-500">
-              Payment
-            </span>
-
-            <span className="font-bold text-green-600">
-              Confirmed
-            </span>
-          </div>
-
+        {/* Status */}
+        <div
+          className="
+            mt-5
+            inline-flex
+            items-center
+            gap-2
+            px-4
+            py-2
+            rounded-full
+            bg-green-50
+            text-green-600
+            text-sm
+            font-bold
+          "
+        >
+          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          Order confirmed
         </div>
 
         {/* Buttons */}
-
-        <div className="mt-10 space-y-4">
-
-          <Link
-            to="/orders"
-            className="w-full h-14 rounded-full bg-[#BD6A3C] hover:bg-[#A85A2F] text-white font-bold flex items-center justify-center gap-3 transition-all duration-300"
+        <div className="mt-7 space-y-3">
+          {/* Track Order */}
+          <button
+            onClick={() => {
+              if (orderId) {
+                navigate(`/orders/${orderId}`);
+              } else {
+                navigate("/orders");
+              }
+            }}
+            className="
+              w-full
+              h-12
+              rounded-2xl
+              bg-[#C56B3C]
+              text-white
+              font-bold
+              text-base
+              flex
+              items-center
+              justify-center
+              gap-2
+              shadow-[0_8px_20px_rgba(197,107,60,0.25)]
+              hover:bg-[#b85f32]
+              hover:-translate-y-[1px]
+              transition-all
+            "
           >
-            <ShoppingBag size={20} />
-            View My Orders
-          </Link>
+            <Package size={20} />
+            Track My Order
+          </button>
 
-          <Link
-            to="/"
-            className="w-full h-14 rounded-full border-2 border-[#BD6A3C] text-[#BD6A3C] hover:bg-[#BD6A3C] hover:text-white font-bold flex items-center justify-center gap-3 transition-all duration-300"
+          {/* Home */}
+          <button
+            onClick={() => navigate("/")}
+            className="
+              w-full
+              h-12
+              rounded-2xl
+              border
+              border-[#C56B3C]
+              bg-white
+              text-[#C56B3C]
+              font-bold
+              text-base
+              flex
+              items-center
+              justify-center
+              gap-2
+              hover:bg-[#fff7f2]
+              transition-all
+            "
           >
             <Home size={20} />
-            Back To Home
-          </Link>
-
+            Back to Home
+          </button>
         </div>
-
-      </div>
-
-    </section>
+      </motion.div>
+    </div>
   );
 };
 

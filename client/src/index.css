@@ -27,3 +27,39 @@ body{
 html {
   scroll-behavior: smooth;
 }
+/* Swiper */
+
+.swiper {
+  overflow: visible !important;
+}
+
+.swiper-slide {
+  height: auto;
+}
+
+.swiper-button-disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Smooth scrolling */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bd6a3c;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fafafa;
+}

@@ -8,11 +8,29 @@ import type { ReactNode } from "react";
 import * as cartApi from "../api/cartApi";
 
 interface CartItem {
+
   _id: string;
-  pizza: any;
+
+  pizza?: any;
+
   quantity: number;
+
   size: string;
+
+  crust?: string;
+
+  sauce?: string;
+
+  cheese?: string;
+
+  toppings?: string[];
+
   price: number;
+
+  isCustomized?: boolean;
+
+  customName?: string;
+
 }
 
 interface CartContextType {
@@ -24,7 +42,25 @@ interface CartContextType {
   addItem: (
     pizzaId: string,
     size: string,
-    quantity: number
+    quantity: number,
+    customization?: {
+
+      name?: string;
+
+      crust?: string;
+
+      sauce?: string;
+
+      cheese?: string;
+
+      toppings?: string[];
+
+      price?: number;
+
+      isCustomized?: boolean;
+
+    }
+
   ) => Promise<void>;
 
   updateItem: (
@@ -52,21 +88,26 @@ export const CartProvider = ({
   const [loading, setLoading] = useState(true);
 
   const fetchCart = async () => {
+    setLoading(true);
+
     try {
-      setLoading(true);
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setCart([]);
+        return;
+      }
 
       const res = await cartApi.getCart();
 
       setCart(res.data.cartItems || []);
-
     } catch (error) {
-      console.error(error);
-      setCart([]);
-
+      console.log(error);
     } finally {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetchCart();
@@ -75,15 +116,47 @@ export const CartProvider = ({
   const addItem = async (
     pizzaId: string,
     size: string,
-    quantity: number
+    quantity: number,
+    customization?: {
+      name?: string;
+
+      crust?: string;
+
+      sauce?: string;
+
+      cheese?: string;
+
+      toppings?: string[];
+
+      price?: number;
+
+      isCustomized?: boolean;
+    }
+
   ) => {
-    await cartApi.addToCart({
-      pizzaId,
+
+
+    const payload = {
+
+      pizzaId:
+        pizzaId === ""
+          ? null
+          : pizzaId,
+
       quantity,
+
       size,
-    });
+
+      ...customization,
+
+    };
+
+
+    await cartApi.addToCart(payload);
+
 
     await fetchCart();
+
   };
 
   const updateItem = async (

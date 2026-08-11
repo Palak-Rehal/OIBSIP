@@ -7,20 +7,90 @@ import {
   CheckCircle2,
   XCircle,
   Flame,
+  Loader2,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import type { Pizza } from "../../types/pizza";
+import { useCart } from "../../context/CartContext";
+import { useWishlist } from "../../context/WishlistContext";
+import toast from "react-hot-toast";
+
 const IMAGE_URL = "http://localhost:5000";
 interface Props {
   pizza: Pizza;
 }
 
 const PizzaCard = ({ pizza }: Props) => {
-  const [liked, setLiked] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [togglingWishlist, setTogglingWishlist] = useState(false);
+
+  const navigate = useNavigate();
+  const { addItem } = useCart();
+  const { isWishlisted, toggleWishlist } = useWishlist();
+
+  const wishlisted = isWishlisted(pizza._id);
 
   const startingPrice =
     pizza.sizes.length > 0 ? pizza.sizes[0].price : 0;
+
+  const isSoldOut = pizza.isAvailable === false;
+
+  const handleToggleWishlist = async (
+    e: React.MouseEvent
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (togglingWishlist) return;
+
+    setTogglingWishlist(true);
+
+    try {
+      await toggleWishlist(pizza._id);
+
+      toast.success(
+        wishlisted ? "Removed from wishlist" : "Added to wishlist"
+      );
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        toast.error("Please log in to save pizzas to your wishlist.");
+        navigate("/login");
+      } else {
+        toast.error("Couldn't update your wishlist.");
+      }
+    } finally {
+      setTogglingWishlist(false);
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (isSoldOut || adding) return;
+
+    const defaultSize = pizza.sizes[0]?.size;
+
+    if (!defaultSize) {
+      toast.error("This pizza has no available size.");
+      return;
+    }
+
+    setAdding(true);
+
+    try {
+      await addItem(pizza._id, defaultSize, 1);
+
+      toast.success(`${pizza.name} added to cart`);
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        toast.error("Please log in to add items to your cart.");
+        navigate("/login");
+      } else {
+        toast.error("Couldn't add this pizza to your cart.");
+      }
+    } finally {
+      setAdding(false);
+    }
+  };
 
   return (
     <div
@@ -61,7 +131,8 @@ const PizzaCard = ({ pizza }: Props) => {
         {/* Favourite */}
 
         <button
-          onClick={() => setLiked(!liked)}
+          onClick={handleToggleWishlist}
+          disabled={togglingWishlist}
           className="
           absolute
           top-4
@@ -76,12 +147,13 @@ const PizzaCard = ({ pizza }: Props) => {
           justify-center
           transition
           hover:scale-110
+          disabled:opacity-60
           "
         >
           <Heart
             size={18}
             className={
-              liked
+              wishlisted
                 ? "fill-red-500 text-red-500"
                 : "text-gray-400"
             }
@@ -97,7 +169,7 @@ const PizzaCard = ({ pizza }: Props) => {
             absolute
             top-4
             left-4
-            bg-[#BD6A3C]
+            bg-[#D8531F]
             text-white
             rounded-full
             px-3
@@ -125,7 +197,7 @@ const PizzaCard = ({ pizza }: Props) => {
 
         <div className="flex justify-between">
 
-          <h2 className="text-2xl font-black text-[#2E2B27]">
+          <h2 className="text-2xl font-black text-[#22281F]">
 
             {pizza.name}
 
@@ -246,7 +318,7 @@ const PizzaCard = ({ pizza }: Props) => {
 
             </p>
 
-            <h2 className="text-3xl font-black text-[#BD6A3C]">
+            <h2 className="text-3xl font-black text-[#D8531F]">
 
               ₹{startingPrice}
 
@@ -265,7 +337,7 @@ const PizzaCard = ({ pizza }: Props) => {
             flex
             items-center
             justify-center
-            hover:bg-[#BD6A3C]
+            hover:bg-[#D8531F]
             hover:text-white
             transition
             "
@@ -278,13 +350,15 @@ const PizzaCard = ({ pizza }: Props) => {
         {/* BUTTON */}
 
         <button
+          onClick={handleAddToCart}
+          disabled={isSoldOut || adding}
           className="
           mt-7
           w-full
           rounded-full
           h-14
           bg-gradient-to-r
-          from-[#BD6A3C]
+          from-[#D8531F]
           to-[#A85A2F]
           text-white
           font-bold
@@ -296,11 +370,22 @@ const PizzaCard = ({ pizza }: Props) => {
           duration-300
           hover:scale-[1.02]
           hover:shadow-xl
+          disabled:opacity-50
+          disabled:hover:scale-100
+          disabled:cursor-not-allowed
           "
         >
-          <ShoppingCart size={20} />
+          {adding ? (
+            <Loader2 size={20} className="animate-spin" />
+          ) : (
+            <ShoppingCart size={20} />
+          )}
 
-          Add To Cart
+          {isSoldOut
+            ? "Sold Out"
+            : adding
+            ? "Adding..."
+            : "Add To Cart"}
 
         </button>
 

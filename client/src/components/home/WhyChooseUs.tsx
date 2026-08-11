@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   Clock,
   Leaf,
@@ -11,73 +12,74 @@ const reasons = [
   {
     id: 1,
     icon: ChefHat,
-    title: "Freshly Crafted Pizzas",
+    title: "Freshly Crafted",
     description:
-      "Every pizza is handcrafted by our expert chefs using fresh ingredients and authentic recipes.",
+      "Handcrafted by expert chefs using fresh ingredients and authentic recipes.",
   },
   {
     id: 2,
     icon: Leaf,
     title: "Premium Ingredients",
     description:
-      "We use high-quality cheese, fresh vegetables, and carefully selected ingredients for the best taste.",
+      "High-quality cheese, fresh vegetables, and carefully selected toppings.",
   },
   {
     id: 3,
     icon: Truck,
-    title: "Fast & Reliable Delivery",
+    title: "Fast Delivery",
     description:
-      "Hot and fresh pizzas delivered quickly to your doorstep with our trusted delivery service.",
+      "Hot, fresh pizzas delivered quickly with our trusted delivery service.",
   },
   {
     id: 4,
     icon: Clock,
-    title: "Quick Preparation",
+    title: "Quick Prep",
     description:
-      "Our optimized kitchen process ensures your order reaches you without unnecessary delays.",
+      "An optimized kitchen process means no unnecessary delays on your order.",
   },
   {
     id: 5,
     icon: ShieldCheck,
     title: "Quality Guaranteed",
     description:
-      "Strict quality checks ensure every pizza meets our high standards before delivery.",
+      "Strict quality checks on every pizza before it leaves the kitchen.",
   },
   {
     id: 6,
     icon: Heart,
     title: "Made With Love",
     description:
-      "We put passion and care into every pizza to create memorable food experiences.",
+      "Passion and care in every pizza, for a memorable food experience.",
   },
 ];
 
 const WhyChooseUs = () => {
+  const navigate = useNavigate();
+
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="py-16 md:py-20 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
 
-        {/* Heading */}
-        <div className="text-center mb-16">
+        {/* Compact heading */}
+        <div className="text-center mb-12">
 
-          <span className="text-[#BD6A3C] font-semibold uppercase tracking-[4px]">
+          <span className="text-xs font-bold text-[#D8531F] uppercase tracking-[3px]">
             Why Choose Us
           </span>
 
-          <h2 className="mt-4 text-4xl md:text-5xl font-black text-[#2E2B27]">
+          <h2 className="mt-2 text-3xl md:text-4xl font-black text-[#22281F]">
             Why Pizza Lovers Choose PizzaHub
           </h2>
 
-          <p className="mt-5 text-gray-500 max-w-2xl mx-auto text-lg">
-            We combine delicious taste, quality ingredients, and fast service
-            to give you the perfect pizza experience every time.
+          <p className="mt-3 text-gray-500 max-w-xl mx-auto">
+            Delicious taste, quality ingredients, and fast service — every
+            single time.
           </p>
 
         </div>
 
-
-        {/* Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Compact cards — icon + text in a row, not a tall stack */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
           {reasons.map((item) => {
 
@@ -88,63 +90,50 @@ const WhyChooseUs = () => {
                 key={item.id}
                 className="
                   group
+                  flex
+                  items-start
+                  gap-4
                   bg-[#FAF7F2]
-                  rounded-[30px]
-                  p-8
+                  rounded-2xl
+                  p-5
                   border
                   border-[#E7DED3]
+                  hover:border-[#D8531F]/40
                   hover:bg-white
-                  hover:shadow-2xl
-                  hover:-translate-y-3
+                  hover:shadow-lg
                   transition-all
-                  duration-500
+                  duration-300
                 "
               >
 
-                {/* Icon */}
                 <div
                   className="
-                    w-16
-                    h-16
+                    w-11
+                    h-11
+                    shrink-0
                     flex
                     items-center
                     justify-center
-                    rounded-2xl
-                    bg-[#BD6A3C]
+                    rounded-xl
+                    bg-[#D8531F]
                     text-white
-                    mb-6
                     group-hover:scale-110
                     transition
-                    duration-500
+                    duration-300
                   "
                 >
-                  <Icon size={30}/>
+                  <Icon size={20} />
                 </div>
 
+                <div>
+                  <h3 className="font-bold text-[#22281F]">
+                    {item.title}
+                  </h3>
 
-                {/* Content */}
-                <h3
-                  className="
-                    text-2xl
-                    font-black
-                    text-[#2E2B27]
-                    mb-4
-                  "
-                >
-                  {item.title}
-                </h3>
-
-
-                <p
-                  className="
-                    text-gray-500
-                    leading-7
-                    text-lg
-                  "
-                >
-                  {item.description}
-                </p>
-
+                  <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
 
               </div>
             );
@@ -152,40 +141,40 @@ const WhyChooseUs = () => {
 
         </div>
 
-
-        {/* Experience Banner */}
+        {/* Compact experience banner */}
 
         <div
           className="
-            mt-20
-            rounded-[35px]
-            bg-[#2E2B27]
+            mt-14
+            rounded-[28px]
+            bg-[#22281F]
             px-8
-            py-12
+            py-10
             text-center
             text-white
           "
         >
 
-          <h3 className="text-3xl md:text-4xl font-black">
+          <h3 className="text-2xl md:text-3xl font-black">
             Experience The Perfect Pizza Moment 🍕
           </h3>
 
-          <p className="mt-4 text-gray-300 text-lg max-w-3xl mx-auto">
+          <p className="mt-3 text-gray-300 max-w-lg mx-auto">
             From the first bite to the last slice, PizzaHub brings happiness
             with every order.
           </p>
 
-
           <button
+            onClick={() => navigate("/menu")}
             className="
-              mt-8
-              bg-[#BD6A3C]
-              px-8
-              py-4
+              mt-6
+              bg-[#D8531F]
+              px-7
+              py-3.5
               rounded-full
               font-bold
-              hover:bg-[#a95731]
+              text-sm
+              hover:bg-[#B8431A]
               transition
             "
           >
@@ -193,7 +182,6 @@ const WhyChooseUs = () => {
           </button>
 
         </div>
-
 
       </div>
     </section>

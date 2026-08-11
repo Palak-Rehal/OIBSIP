@@ -7,7 +7,10 @@ export interface IUser extends Document {
   phone: string;
   role: "customer" | "admin";
   isVerified: boolean;
+  verificationToken?: string;
   profileImage?: string;
+  resetPasswordToken?: string;
+  resetPasswordExpire?: Date;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -31,6 +34,14 @@ const UserSchema = new Schema<IUser>(
       required: true,
     },
 
+    resetPasswordToken: {
+      type: String,
+    },
+
+    resetPasswordExpire: {
+      type: Date,
+    },
+
     phone: {
       type: String,
       required: true,
@@ -50,6 +61,10 @@ const UserSchema = new Schema<IUser>(
     profileImage: {
       type: String,
       default: "",
+    },
+
+    verificationToken: {
+      type: String
     },
   },
   {

@@ -11,22 +11,38 @@ export interface CreateOrderData {
   };
 
   paymentMethod: string;
+
+  cartItemId?: string;
 }
 
-export const createOrder = (
-  data: CreateOrderData
-) =>
-  API.post("/orders", data);
+// ==========================================
+// CREATE ORDER
+// ==========================================
 
-export const getMyOrders = () =>
-  API.get("/orders/my-orders");
+export const createOrder = (data: CreateOrderData) => {
+  return API.post("/orders", data);
+};
 
-export const getOrderById = (
-  id: string
-) =>
-  API.get(`/orders/${id}`);
+// ==========================================
+// GET MY ORDERS
+// ==========================================
 
-export const cancelOrder = (
-  id: string
-) =>
-  API.put(`/orders/${id}/cancel`);
+export const getMyOrders = () => {
+  return API.get("/orders");
+};
+
+// ==========================================
+// GET ORDER BY ID
+// ==========================================
+
+export const getOrderById = (id: string) => {
+  return API.get(`/orders/${id}`);
+};
+
+// ==========================================
+// CANCEL ORDER
+// ==========================================
+
+export const cancelOrder = (id: string) => {
+  return API.put(`/orders/cancel/${id}`);
+};

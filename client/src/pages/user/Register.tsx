@@ -9,6 +9,8 @@ import {
   Phone,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../../api/authApi";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -33,16 +35,33 @@ const Register = () => {
   };
 
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    console.log(formData);
+  try {
+    const response = await registerUser(formData);
 
-    // Connect register API here
-    // after successful registration:
-     navigate("/login");
+    toast.success(
+      response.data.message ||
+      "Registration successful! Please verify your email."
+    );
 
-  };
+    navigate("/login", {
+      state: {
+        message:
+          "Registration successful! Please verify your email before logging in.",
+      },
+    });
+
+  } catch (error: any) {
+
+    toast.error(
+      error.response?.data?.message ||
+      "Registration failed"
+    );
+
+  }
+};
 
 
   return (

@@ -1,5 +1,6 @@
 import { Pizza, MapPin, Phone, Mail, ArrowRight } from "lucide-react";
 import { FaInstagram, FaFacebook, FaTwitter } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -17,10 +18,10 @@ const Footer = () => {
     <footer className="relative bg-[#1F1C18] text-[#C9C4BA] overflow-hidden">
 
       {/* glow background */}
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#BD6A3C]/20 blur-[120px] rounded-full" />
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#D8531F]/20 blur-[120px] rounded-full" />
 
       {/* top line */}
-      <span className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#7C9473] to-[#BD6A3C]" />
+      <span className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#7C9473] to-[#D8531F]" />
 
       <div className="relative max-w-7xl mx-auto px-5 sm:px-8 pt-20 pb-10">
 
@@ -29,11 +30,11 @@ const Footer = () => {
           {/* BRAND */}
           <div>
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 rounded-full bg-[#BD6A3C] flex items-center justify-center shadow-[0_0_25px_rgba(189,106,60,0.6)]">
+              <div className="w-10 h-10 rounded-full bg-[#D8531F] flex items-center justify-center shadow-[0_0_25px_rgba(189,106,60,0.6)]">
                 <Pizza size={18} className="text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white">
-                Pizza<span className="text-[#BD6A3C]">Hub</span>
+                Pizza<span className="text-[#D8531F]">Hub</span>
               </h2>
             </div>
 
@@ -72,7 +73,7 @@ const Footer = () => {
             <ul className="space-y-3 text-sm text-[#A8A39A]">
               {quickLinks.map((item) => (
                 <li key={item}>
-                  <a className="hover:text-[#BD6A3C] transition">
+                  <a className="hover:text-[#D8531F] transition">
                     {item}
                   </a>
                 </li>
@@ -106,7 +107,7 @@ const Footer = () => {
                 placeholder="Enter email"
                 className="w-full px-4 py-2 rounded-l-full bg-[#2A2622] text-white outline-none"
               />
-              <button className="bg-[#BD6A3C] px-4 rounded-r-full hover:bg-[#A85A2F] transition">
+              <button className="bg-[#D8531F] px-4 rounded-r-full hover:bg-[#A85A2F] transition">
                 <ArrowRight size={18} />
               </button>
             </div>
@@ -130,8 +131,14 @@ const Footer = () => {
         <div className="border-t border-[#2A2622] mt-12 pt-6 flex flex-col sm:flex-row justify-between text-sm text-[#7A756D]">
           <p>© {year} PizzaHub. All rights reserved.</p>
           <div className="flex gap-6 mt-3 sm:mt-0">
-            <span className="hover:text-[#BD6A3C] cursor-pointer">Privacy</span>
-            <span className="hover:text-[#BD6A3C] cursor-pointer">Terms</span>
+            <span className="hover:text-[#D8531F] cursor-pointer">Privacy</span>
+            <span className="hover:text-[#D8531F] cursor-pointer">Terms</span>
+            <Link
+              to="/admin/login"
+              className="hover:text-[#D8531F] transition"
+            >
+              Staff Login
+            </Link>
           </div>
         </div>
 

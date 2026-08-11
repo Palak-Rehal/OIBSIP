@@ -14,6 +14,8 @@ const Hero = () => {
           <div className="absolute w-[320px] h-[320px] rounded-full border-2 border-dashed border-[#7C9473]/30 animate-spin-slow" />
 
           <img
+
+          
             src="/Pizza.png"
             alt="Pizza"
             className="relative w-[320px] md:w-[450px] object-contain drop-shadow-2xl"

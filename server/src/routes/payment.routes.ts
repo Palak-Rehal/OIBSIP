@@ -1,20 +1,28 @@
-import { Router } from "express";
-import authMiddleware from "../middleware/auth.middleware";
-import { createPaymentOrder } from "../controllers/payment.controller";
+import express from "express";
+
 import {
+  createPaymentOrder,
   verifyPayment,
 } from "../controllers/payment.controller";
-const router = Router();
+
+import  protect from "../middleware/auth.middleware";
+
+
+const router = express.Router();
+
 
 router.post(
   "/create-order",
-  authMiddleware,
+  protect,
   createPaymentOrder
 );
+
+
 router.post(
-  "/verify",
-  authMiddleware,
+  "/verify-payment",
+  protect,
   verifyPayment
 );
+
 
 export default router;

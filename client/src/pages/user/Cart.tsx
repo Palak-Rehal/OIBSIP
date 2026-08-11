@@ -1,5 +1,5 @@
 import { ShoppingCart, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 
 import CartItem from "../../components/cart/CartItem";
@@ -7,6 +7,7 @@ import CartSummary from "../../components/cart/CartSummary";
 import EmptyCart from "../../components/cart/EmptyCart";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const {
     cart,
     loading,
@@ -126,11 +127,30 @@ const Cart = () => {
           <div className="space-y-6">
 
             {cart.map((item) => (
-              <CartItem
-                key={item._id}
-                item={item}
-                refreshCart={fetchCart}
-              />
+              <div key={item._id}>
+                <CartItem
+                  item={item}
+                  refreshCart={fetchCart}
+                />
+
+                <div className="mt-2 flex justify-end">
+                  <button
+                    onClick={() => navigate(`/checkout?itemId=${item._id}`)}
+                    className="
+        px-5 py-2.5
+        rounded-xl
+        bg-[#BD6A3C]
+        text-white
+        text-sm
+        font-bold
+        hover:bg-[#A85A2F]
+        transition
+      "
+                  >
+                    Checkout This Item
+                  </button>
+                </div>
+              </div>
             ))}
 
           </div>

@@ -12,11 +12,11 @@ const SortDropdown = ({
   return (
     <div className="flex items-center gap-3">
 
-      <div className="hidden sm:flex items-center gap-2 text-[#2E2B27] font-semibold">
+      <div className="hidden sm:flex items-center gap-2 text-[#22281F] font-semibold">
 
         <ArrowUpDown
           size={18}
-          className="text-[#BD6A3C]"
+          className="text-[#D8531F]"
         />
 
         Sort By
@@ -36,14 +36,14 @@ const SortDropdown = ({
           border-[#E7DED3]
           bg-white
           shadow-sm
-          text-[#2E2B27]
+          text-[#22281F]
           font-semibold
           outline-none
           cursor-pointer
           transition-all
           duration-300
-          hover:border-[#BD6A3C]
-          focus:border-[#BD6A3C]
+          hover:border-[#D8531F]
+          focus:border-[#D8531F]
           focus:ring-2
           focus:ring-[#F5D4BF]
         "
@@ -52,20 +52,16 @@ const SortDropdown = ({
           Newest
         </option>
 
-        <option value="priceLow">
+        <option value="price_asc">
           Price : Low → High
         </option>
 
-        <option value="priceHigh">
+        <option value="price_desc">
           Price : High → Low
         </option>
 
         <option value="rating">
           Highest Rated
-        </option>
-
-        <option value="popular">
-          Most Popular
         </option>
 
       </select>

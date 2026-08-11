@@ -7,6 +7,27 @@ export interface AuthRequest extends Request {
     role: string;
   };
 }
+export const adminOnly = (
+  req: any,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      message: "Not Authorized",
+    });
+  }
+
+  if (req.user.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      message: "Admin Access Only",
+    });
+  }
+
+  next();
+};
 
 const authMiddleware = (
   req: AuthRequest,
@@ -23,7 +44,9 @@ const authMiddleware = (
       });
     }
 
-    const token = authHeader.split(" ")[1];
+   const token = authHeader.startsWith("Bearer ")
+  ? authHeader.split(" ")[1]
+  : authHeader;
 
     const decoded = jwt.verify(
       token,

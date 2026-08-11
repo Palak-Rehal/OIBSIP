@@ -4,11 +4,39 @@ export interface IOrder extends Document {
   user: mongoose.Types.ObjectId;
 
   items: {
-    pizza: mongoose.Types.ObjectId;
+    pizza?: {
+      _id: mongoose.Types.ObjectId;
+      name: string;
+      image?: string;
+    } | mongoose.Types.ObjectId | null;
+
+    name?: string;
+
     quantity: number;
+
     size: string;
+
+    crust?: string;
+
+    sauce?: string;
+
+    cheese?: string;
+
+    toppings?: string[];
+
     price: number;
+
+    isCustomized?: boolean;
   }[];
+
+  deliveryAddress: {
+    fullName: string;
+    phone: string;
+    address: string;
+    city: string;
+    state: string;
+    pincode: string;
+  };
 
   totalAmount: number;
 
@@ -23,8 +51,8 @@ export interface IOrder extends Document {
   razorpaySignature: string;
 
   orderStatus: string;
-
 }
+
 const OrderSchema = new Schema<IOrder>(
   {
     user: {
@@ -34,29 +62,101 @@ const OrderSchema = new Schema<IOrder>(
     },
 
     items: [
-  {
-    pizza: {
-      type: Schema.Types.ObjectId,
-      ref: "Pizza",
-      required: true,
-    },
+      {
 
-    quantity: {
-      type: Number,
-      required: true,
-    },
+        pizza: {
+          type: Schema.Types.ObjectId,
+          ref: "Pizza",
+          required: false,
+          default: null,
+        },
 
-    size: {
-      type: String,
-      required: true,
-    },
 
-    price: {
-      type: Number,
-      required: true,
+        name: {
+          type: String,
+          default: "",
+        },
+
+
+        quantity: {
+          type: Number,
+          required: true,
+        },
+
+
+        size: {
+          type: String,
+          required: true,
+        },
+
+
+        crust: {
+          type: String,
+          default: "",
+        },
+
+        sauce: {
+          type: String,
+          default: "",
+        },
+
+        cheese: {
+          type: String,
+          default: "",
+        },
+
+
+        toppings: {
+          type: [String],
+          default: [],
+        },
+
+
+        price: {
+          type: Number,
+          required: true,
+        },
+
+
+        isCustomized: {
+          type: Boolean,
+          default: false,
+        },
+
+      },
+    ],
+
+    deliveryAddress: {
+      fullName: {
+        type: String,
+        required: true,
+      },
+
+      phone: {
+        type: String,
+        required: true,
+      },
+
+      address: {
+        type: String,
+        required: true,
+      },
+
+      city: {
+        type: String,
+        required: true,
+      },
+
+      state: {
+        type: String,
+        required: true,
+      },
+
+      pincode: {
+        type: String,
+        required: true,
+      },
     },
-  },
-],
 
     totalAmount: {
       type: Number,
@@ -77,7 +177,7 @@ const OrderSchema = new Schema<IOrder>(
 
     razorpayOrderId: {
       type: String,
-       default: "",
+      default: "",
     },
 
     razorpayPaymentId: {
@@ -89,7 +189,6 @@ const OrderSchema = new Schema<IOrder>(
       type: String,
       default: "",
     },
-
 
     orderStatus: {
       type: String,
@@ -108,6 +207,4 @@ const OrderSchema = new Schema<IOrder>(
   }
 );
 
-const Order = mongoose.model<IOrder>("Order", OrderSchema);
-
-export default Order;
+export default mongoose.model<IOrder>("Order", OrderSchema);

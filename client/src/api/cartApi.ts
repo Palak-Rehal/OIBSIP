@@ -1,24 +1,41 @@
 import API from "./axios";
 
+
 export const addToCart = (data: {
-  pizzaId: string;
+  pizzaId?: string | null;
   quantity: number;
   size: string;
-}) => API.post("/cart", data);
+  name?: string;
+  crust?: string;
+  sauce?: string;
+  cheese?: string;
+  toppings?: string[];
+  price?: number;
+  isCustomized?: boolean;
+}) =>
+  API.post("/cart/add", data);
+
+
 
 export const getCart = () =>
   API.get("/cart");
+
+
 
 export const updateCart = (
   id: string,
   quantity: number
 ) =>
-  API.put(`/cart/${id}`, {
+  API.put(`/cart/update/${id}`, {
     quantity,
   });
 
+
+
 export const removeCartItem = (id: string) =>
-  API.delete(`/cart/${id}`);
+  API.delete(`/cart/remove/${id}`);
+
+
 
 export const clearCart = () =>
-  API.delete("/cart");
+  API.delete("/cart/clear");

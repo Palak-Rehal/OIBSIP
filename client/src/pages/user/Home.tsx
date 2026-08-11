@@ -8,6 +8,7 @@ import HowItWorks from "../../components/home/HowItWorks";
 import Testimonials from "../../components/home/Testimonials";
 import DownloadApp from "../../components/home/DownloadApp";
 import Newsletter from "../../components/home/Newsletter";
+import PizzaLabBanner from "../../components/home/PizzaLabBanner";
 
 const Home = () => {
   return (
@@ -20,6 +21,8 @@ const Home = () => {
 
       <Offers />
 
+      <PizzaLabBanner />
+
       <WhyChooseUs />
 
       <HowItWorks />
@@ -30,7 +33,6 @@ const Home = () => {
 
       <Newsletter />
 
-      <Offers />
     </>
   );
 };

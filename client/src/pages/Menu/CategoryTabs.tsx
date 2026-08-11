@@ -2,8 +2,9 @@ import {
   Pizza,
   Leaf,
   Beef,
-  Flame,
-  Star,
+  Layers,
+  IceCreamCone,
+  CupSoda,
 } from "lucide-react";
 
 interface Props {
@@ -11,6 +12,9 @@ interface Props {
   onCategoryChange: (category: string) => void;
 }
 
+// Values here must exactly match the Pizza model's category enum
+// (server/src/models/Pizza.ts) or the backend filter silently
+// returns zero results.
 const categories = [
   {
     name: "All",
@@ -23,19 +27,24 @@ const categories = [
     color: "bg-green-100",
   },
   {
-    name: "Non Veg",
+    name: "Non-Veg",
     icon: Beef,
     color: "bg-red-100",
   },
   {
-    name: "Spicy",
-    icon: Flame,
-    color: "bg-orange-100",
+    name: "Cheese Burst",
+    icon: Layers,
+    color: "bg-yellow-100",
   },
   {
-    name: "Special",
-    icon: Star,
-    color: "bg-yellow-100",
+    name: "Dessert",
+    icon: IceCreamCone,
+    color: "bg-pink-100",
+  },
+  {
+    name: "Beverages",
+    icon: CupSoda,
+    color: "bg-blue-100",
   },
 ];
 
@@ -77,8 +86,8 @@ const CategoryTabs = ({
 
                 ${
                   active
-                    ? "bg-[#BD6A3C] text-white border-[#BD6A3C] shadow-xl scale-105"
-                    : "bg-white border-[#E7DED3] hover:border-[#BD6A3C] hover:shadow-md hover:-translate-y-1"
+                    ? "bg-[#D8531F] text-white border-[#D8531F] shadow-xl scale-105"
+                    : "bg-white border-[#E7DED3] hover:border-[#D8531F] hover:shadow-md hover:-translate-y-1"
                 }
               `}
             >

@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import Pizza from "../models/Pizza";
 
+// ===============================
+// Create Pizza
+// ===============================
+
 export const createPizza = async (
   req: Request,
   res: Response
@@ -25,95 +29,182 @@ export const createPizza = async (
     });
 
   } catch (error: any) {
-    console.error("Create Pizza Error:", error);
+
+    console.error(error);
 
     return res.status(500).json({
       success: false,
       message: error.message,
-      error,
     });
+
   }
 };
+
+// ===============================
+// Get All Pizzas
+// ===============================
+
 export const getAllPizzas = async (
   req: Request,
   res: Response
 ) => {
   try {
-    // Query Parameters
-    const search = req.query.search as string;
-    const category = req.query.category as string;
-    const sort = req.query.sort as string;
-    const featured = req.query.featured;
+    const search = String(req.query.search || "").trim();
+    const category = String(req.query.category || "").trim();
+    const sort = String(req.query.sort || "latest");
+    const featured = String(req.query.featured || "");
 
-    const minPrice = Number(req.query.minPrice);
-    const maxPrice = Number(req.query.maxPrice);
+    const minPrice =
+      req.query.minPrice !== undefined
+        ? Number(req.query.minPrice)
+        : undefined;
 
-    const page = Math.max(1, Number(req.query.page) || 1);
-const limit = Math.max(1, Number(req.query.limit) || 10);
+    const maxPrice =
+      req.query.maxPrice !== undefined
+        ? Number(req.query.maxPrice)
+        : undefined;
+
+    const page = Math.max(
+      1,
+      Number(req.query.page) || 1
+    );
+
+    const limit = Math.max(
+      1,
+      Number(req.query.limit) || 100
+    );
 
     const skip = (page - 1) * limit;
 
-    // Filter Object
-    let query: any = {};
+    // ===============================
+    // QUERY
+    // ===============================
 
-    // Search by Pizza Name
+    const query: any = {
+      isAvailable: true,
+
+      // Menu contains ONLY pizzas
+      category: {
+        $in: ["Veg", "Non-Veg", "Cheese Burst"],
+      },
+    };
+
+    // ===============================
+    // SEARCH
+    // ===============================
+
     if (search) {
-      query.name = {
-        $regex: search,
-        $options: "i",
-      };
+      query.$or = [
+        {
+          name: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          description: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          category: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          ingredients: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+      ];
     }
 
-    // Category Filter
+    // Category
     if (category) {
       query.category = category;
     }
 
+    // Featured
     if (featured === "true") {
-  query.isFeatured = true;
-  }
-
-    // Price Filter
-    if (minPrice || maxPrice) {
-      query.price = {};
-
-      if (minPrice) {
-        query.price.$gte = minPrice;
-      }
-
-      if (maxPrice) {
-        query.price.$lte = maxPrice;
-      }
+      query.isFeatured = true;
     }
 
-    // Sorting
-    let sortOption: any = {};
+    // ===============================
+    // PRICE
+    // ===============================
+
+    if (
+      minPrice !== undefined ||
+      maxPrice !== undefined
+    ) {
+      const priceFilter: any = {};
+
+      if (
+        minPrice !== undefined &&
+        !isNaN(minPrice)
+      ) {
+        priceFilter.$gte = minPrice;
+      }
+
+      if (
+        maxPrice !== undefined &&
+        !isNaN(maxPrice)
+      ) {
+        priceFilter.$lte = maxPrice;
+      }
+
+      query.sizes = {
+        $elemMatch: {
+          price: priceFilter,
+        },
+      };
+    }
+
+    // ===============================
+    // SORT
+    // ===============================
+
+    let sortOption: any = {
+      createdAt: -1,
+    };
 
     switch (sort) {
       case "price_asc":
-        sortOption.price = 1;
+        sortOption = {
+          "sizes.0.price": 1,
+        };
         break;
 
       case "price_desc":
-        sortOption.price = -1;
+        sortOption = {
+          "sizes.0.price": -1,
+        };
         break;
 
       case "rating":
-        sortOption.rating = -1;
+        sortOption = {
+          rating: -1,
+        };
         break;
 
       case "latest":
-        sortOption.createdAt = -1;
-        break;
-
       default:
-        sortOption.createdAt = -1;
+        sortOption = {
+          createdAt: -1,
+        };
+        break;
     }
 
-    // Total Documents
-    const totalPizzas = await Pizza.countDocuments(query);
+    // ===============================
+    // DATABASE
+    // ===============================
 
-    // Fetch Data
+    const totalPizzas =
+      await Pizza.countDocuments(query);
+
     const pizzas = await Pizza.find(query)
       .sort(sortOption)
       .skip(skip)
@@ -122,14 +213,19 @@ const limit = Math.max(1, Number(req.query.limit) || 10);
     return res.status(200).json({
       success: true,
       currentPage: page,
-      totalPages: Math.ceil(totalPizzas / limit),
+      totalPages:
+        Math.ceil(totalPizzas / limit) || 1,
       totalPizzas,
       count: pizzas.length,
       pizzas,
     });
 
   } catch (error) {
-    console.error(error);
+
+    console.error(
+      "GET ALL PIZZAS ERROR:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
@@ -137,11 +233,17 @@ const limit = Math.max(1, Number(req.query.limit) || 10);
     });
   }
 };
+
+// ===============================
+// Get Pizza By ID
+// ===============================
+
 export const getPizzaById = async (
   req: Request,
   res: Response
 ) => {
   try {
+
     const { id } = req.params;
 
     const pizza = await Pizza.findById(id);
@@ -159,17 +261,25 @@ export const getPizzaById = async (
     });
 
   } catch (error) {
+
     return res.status(500).json({
       success: false,
       message: "Server Error",
     });
+
   }
 };
+
+// ===============================
+// Update Pizza
+// ===============================
+
 export const updatePizza = async (
   req: Request,
   res: Response
 ) => {
   try {
+
     const { id } = req.params;
 
     const pizza = await Pizza.findById(id);
@@ -197,17 +307,25 @@ export const updatePizza = async (
     });
 
   } catch (error) {
+
     return res.status(500).json({
       success: false,
       message: "Server Error",
     });
+
   }
 };
+
+// ===============================
+// Delete Pizza
+// ===============================
+
 export const deletePizza = async (
   req: Request,
   res: Response
 ) => {
   try {
+
     const { id } = req.params;
 
     const pizza = await Pizza.findById(id);
@@ -227,9 +345,11 @@ export const deletePizza = async (
     });
 
   } catch (error) {
+
     return res.status(500).json({
       success: false,
       message: "Server Error",
     });
+
   }
 };

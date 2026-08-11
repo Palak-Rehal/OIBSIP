@@ -37,69 +37,136 @@ const CartItem = ({ item }: Props) => {
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-[#E7DED3] shadow-md p-6 flex flex-col md:flex-row gap-6">
+  <div className="bg-white rounded-3xl border border-[#E7DED3] shadow-md p-6 flex flex-col md:flex-row gap-6">
 
-      <img
-        src={`${IMAGE_URL}${item.pizza.image}`}
-      alt={item.pizza.name}
-        className="w-40 h-40 object-contain mx-auto md:mx-0"
-      />
 
-      <div className="flex-1">
+    {/* Image */}
 
-        <h2 className="text-2xl font-bold text-[#2E2B27]">
-          {item.pizza.name}
-        </h2>
+    <img
+      src={
+        item.isCustomized
+          ? "/pizza-custom.png"
+          : `${IMAGE_URL}${item.pizza?.image}`
+      }
+      alt={
+        item.isCustomized
+          ? "Customized Pizza"
+          : item.pizza?.name
+      }
+      className="w-40 h-40 object-contain mx-auto md:mx-0"
+    />
 
-        <p className="mt-2 text-gray-500">
-          Size : {item.size}
-        </p>
 
-        <p className="mt-3 text-xl font-bold text-[#BD6A3C]">
-          ₹{item.price}
-        </p>
 
-        <div className="flex items-center gap-4 mt-6">
+    <div className="flex-1">
 
-          <button
-            onClick={decrease}
-            className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#BD6A3C] hover:text-white transition"
-          >
-            <Minus size={18} />
-          </button>
 
-          <span className="text-lg font-bold">
-            {item.quantity}
-          </span>
+      <h2 className="text-2xl font-bold text-[#2E2B27]">
 
-          <button
-            onClick={increase}
-            className="w-10 h-10 rounded-full bg-[#BD6A3C] text-white flex items-center justify-center hover:bg-[#A85A2F] transition"
-          >
-            <Plus size={18} />
-          </button>
+        {
+          item.isCustomized
+            ? "Customized Pizza 🍕"
+            : item.pizza?.name
+        }
 
-        </div>
+      </h2>
 
-      </div>
 
-      <div className="flex flex-col justify-between items-end">
+
+      <p className="mt-2 text-gray-500">
+        Size : {item.size}
+      </p>
+
+
+
+      {
+        item.isCustomized && (
+
+          <div className="mt-3 text-gray-500 space-y-1">
+
+            <p>
+              Crust : {item.crust}
+            </p>
+
+            <p>
+              Toppings :
+              {" "}
+              {
+                item.toppings?.join(", ")
+              }
+            </p>
+
+          </div>
+
+        )
+      }
+
+
+
+      <p className="mt-3 text-xl font-bold text-[#BD6A3C]">
+        ₹{item.price}
+      </p>
+
+
+
+      <div className="flex items-center gap-4 mt-6">
+
 
         <button
-          onClick={handleRemove}
-          className="text-red-500 hover:text-red-700 transition"
+          onClick={decrease}
+          className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#BD6A3C] hover:text-white transition"
         >
-          <Trash2 size={22} />
+          <Minus size={18}/>
         </button>
 
-        <h2 className="text-2xl font-black text-[#2E2B27]">
-          ₹{item.price * item.quantity}
-        </h2>
+
+
+        <span className="text-lg font-bold">
+          {item.quantity}
+        </span>
+
+
+
+        <button
+          onClick={increase}
+          className="w-10 h-10 rounded-full bg-[#BD6A3C] text-white flex items-center justify-center hover:bg-[#A85A2F] transition"
+        >
+          <Plus size={18}/>
+        </button>
+
 
       </div>
 
+
     </div>
-  );
+
+
+
+
+    <div className="flex flex-col justify-between items-end">
+
+
+      <button
+        onClick={handleRemove}
+        className="text-red-500 hover:text-red-700 transition"
+      >
+        <Trash2 size={22}/>
+      </button>
+
+
+
+      <h2 className="text-2xl font-black text-[#2E2B27]">
+
+        ₹{item.price * item.quantity}
+
+      </h2>
+
+
+    </div>
+
+
+  </div>
+);
 };
 
 export default CartItem;

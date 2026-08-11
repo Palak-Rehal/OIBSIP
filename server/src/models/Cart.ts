@@ -1,47 +1,115 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
+
 
 export interface ICart extends Document {
+
   user: mongoose.Types.ObjectId;
-  pizza: mongoose.Types.ObjectId;
-  quantity: number;
+
+  pizza?: mongoose.Types.ObjectId | null;
+
+  name?: string;
+
   size: string;
+
+  crust?: string;
+
+  sauce?: string;
+
+  cheese?: string;
+
+  toppings?: string[];
+
+  quantity: number;
+
   price: number;
+
+  isCustomized: boolean;
+
 }
 
-const CartSchema = new Schema<ICart>(
+
+
+const cartSchema = new mongoose.Schema<ICart>(
   {
+
     user: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
 
+
     pizza: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Pizza",
-      required: true,
+      required: false,
+      default: null,
     },
 
-    quantity: {
-      type: Number,
-      default: 1,
+
+    name: {
+      type: String,
+      required: false,
     },
+
 
     size: {
       type: String,
       required: true,
     },
 
+
+    crust: {
+      type: String,
+      required: false,
+    },
+
+    sauce: {
+      type: String,
+      required: false,
+    },
+
+    cheese: {
+      type: String,
+      required: false,
+    },
+
+    
+
+    toppings: {
+      type: [String],
+      default: [],
+    },
+
+
+    quantity: {
+      type: Number,
+      default: 1,
+      min: 1,
+    },
+
+
     price: {
       type: Number,
       required: true,
     },
+
+
+    isCustomized: {
+      type: Boolean,
+      default: false,
+    },
+
+
   },
   {
     timestamps: true,
   }
 );
 
-const Cart = mongoose.model<ICart>("Cart", CartSchema);
 
-export default Cart;
+
+export default mongoose.model<ICart>(
+  "Cart",
+  cartSchema
+);

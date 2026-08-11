@@ -8,6 +8,7 @@ import SortDropdown from "../Menu/SortDropdown";
 import PizzaGrid from "../Menu/PizzaGrid";
 import { getAllPizzas } from "../../api/pizzaApi";
 
+
 interface Pizza {
   _id: string;
   name: string;
@@ -42,40 +43,40 @@ const Menu = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
   const [featured, setFeatured] = useState(false);
 
-useEffect(() => {
-  const load = async () => {
-    try {
-      setLoading(true);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
 
-      const response = await getAllPizzas(
-        search,
-        category === "All" ? "" : category,
-        sort,
-        0,
-        maxPrice,
-        featured
-      );
+        const response = await getAllPizzas(
+          search,
+          category === "All" ? "" : category,
+          sort,
+          undefined,
+          maxPrice < 1000 ? maxPrice : undefined,
+          featured
+        );
 
-      setPizzas(response.data.pizzas || []);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setPizzas(response.data.pizzas || []);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  load();
-}, [
-  search,
-  category,
-  sort,
-  maxPrice,
-  featured,
-]);
+    load();
+  }, [
+    search,
+    category,
+    sort,
+    maxPrice,
+    featured,
+  ]);
 
   useEffect(() => {
-  setSearch(urlSearch);
-}, [urlSearch]);
+    setSearch(urlSearch);
+  }, [urlSearch]);
 
   return (
     <div className="bg-[#FAF7F2] min-h-screen pt-28 pb-16">
@@ -93,32 +94,32 @@ useEffect(() => {
         </div>
 
         {/* Search */}
-          <SearchBar
-         value={search}
-         onChange={(value) => {
-        setSearch(value);
+        <SearchBar
+          value={search}
+          onChange={(value) => {
+            setSearch(value);
 
-      setSearchParams({
-            search: value,
-            category,
-             sort,
+            setSearchParams({
+              search: value,
+              category,
+              sort,
             });
           }}
         />
         {/* Categories */}
         <div className="mt-6">
           <CategoryTabs
-  activeCategory={category}
-  onCategoryChange={(value) => {
-    setCategory(value);
+            activeCategory={category}
+            onCategoryChange={(value) => {
+              setCategory(value);
 
-      setSearchParams({
+              setSearchParams({
                 search,
                 category: value,
                 sort,
-               });
-              }}
-            />
+              });
+            }}
+          />
         </div>
 
         {/* Content */}
@@ -126,30 +127,30 @@ useEffect(() => {
 
           {/* Sidebar */}
           <aside className="lg:w-72">
-  <FilterSidebar
-    maxPrice={maxPrice}
-    featured={featured}
-    onPriceChange={setMaxPrice}
-    onFeaturedChange={setFeatured}
-  />
-</aside>
+            <FilterSidebar
+              maxPrice={maxPrice}
+              featured={featured}
+              onPriceChange={setMaxPrice}
+              onFeaturedChange={setFeatured}
+            />
+          </aside>
 
           {/* Main */}
           <main className="flex-1">
 
             <div className="flex justify-end mb-6">
               <SortDropdown
-  value={sort}
-  onChange={(value) => {
-    setSort(value);
+                value={sort}
+                onChange={(value) => {
+                  setSort(value);
 
-    setSearchParams({
-      search,
-      category,
-      sort: value,
-    });
-  }}
-/>
+                  setSearchParams({
+                    search,
+                    category,
+                    sort: value,
+                  });
+                }}
+              />
             </div>
 
             <PizzaGrid

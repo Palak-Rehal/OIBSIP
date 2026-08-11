@@ -87,10 +87,16 @@ export const AuthProvider = ({
     const profile = await getProfile();
 
     setUser(profile.data.user);
+
+     localStorage.setItem(
+    "user",
+    JSON.stringify(profile.data.user)
+    );
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
     delete API.defaults.headers.common[
       "Authorization"

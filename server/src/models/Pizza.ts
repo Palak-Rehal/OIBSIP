@@ -3,22 +3,33 @@ import mongoose, { Document } from "mongoose";
 interface IPizza extends Document {
   name: string;
   description: string;
-  category: string;
+  category:
+    | "Veg"
+    | "Non-Veg"
+    | "Cheese Burst"
+    | "Dessert"
+    | "Beverages"
+    | "Sides"
+    | "Combos";
+
   image: string;
+
   rating: number;
   totalReviews: number;
   isFeatured: boolean;
   isAvailable: boolean;
+
   ingredients: string[];
 
   sizes: {
     size: "Small" | "Medium" | "Large";
     price: number;
   }[];
-   createdBy?: mongoose.Types.ObjectId;
+
+  createdBy?: mongoose.Types.ObjectId;
 }
 
-const pizzaSchema = new mongoose.Schema<IPizza>(
+const pizzaSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -35,12 +46,15 @@ const pizzaSchema = new mongoose.Schema<IPizza>(
     category: {
       type: String,
       required: true,
+
       enum: [
         "Veg",
         "Non-Veg",
         "Cheese Burst",
         "Dessert",
-        "Beverages"
+        "Beverages",
+        "Sides",
+        "Combos",
       ],
     },
 
@@ -79,26 +93,29 @@ const pizzaSchema = new mongoose.Schema<IPizza>(
     ],
 
     sizes: [
-  {
-    size: {
-      type: String,
-      enum: ["Small", "Medium", "Large"],
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
-  },
-],
+      {
+        size: {
+          type: String,
+          enum: ["Small", "Medium", "Large"],
+          required: true,
+        },
+
+        price: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
   },
+
   {
     timestamps: true,
   }
 );
 
-export default mongoose.model<IPizza>("Pizza", pizzaSchema);
+export default mongoose.model("Pizza", pizzaSchema);

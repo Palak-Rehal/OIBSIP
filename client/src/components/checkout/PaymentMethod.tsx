@@ -1,130 +1,74 @@
-import { useState } from "react";
-import {
-  CreditCard,
-  Wallet,
-  Banknote,
-  CheckCircle2,
-} from "lucide-react";
+import { Wallet, CreditCard } from "lucide-react";
 
-const PaymentMethod = () => {
-  const [method, setMethod] = useState("cod");
+interface Props {
+  payment: string;
+  setPayment: (value: string) => void;
+}
 
-  const payments = [
-    {
-      id: "cod",
-      title: "Cash on Delivery",
-      description: "Pay when your order arrives.",
-      icon: <Banknote size={24} />,
-    },
-    {
-      id: "card",
-      title: "Credit / Debit Card",
-      description: "Visa, Mastercard, RuPay supported.",
-      icon: <CreditCard size={24} />,
-    },
-    {
-      id: "upi",
-      title: "UPI / Wallet",
-      description: "Google Pay, PhonePe, Paytm, BHIM.",
-      icon: <Wallet size={24} />,
-    },
-  ];
-
+const PaymentMethod = ({
+  payment,
+  setPayment,
+}: Props) => {
   return (
-    <div className="space-y-5">
+    <div className="bg-white rounded-3xl p-6 shadow border border-[#E7DED3]">
 
-      {payments.map((item) => (
+      <h2 className="text-xl font-bold mb-5">
+        Payment Method
+      </h2>
+
+      <div className="space-y-4">
 
         <label
-          key={item.id}
-          className={`
-            relative
-            flex
-            items-center
-            justify-between
-            p-5
-            rounded-2xl
-            border-2
-            cursor-pointer
-            transition-all
-            duration-300
-
-            ${
-              method === item.id
-                ? "border-[#BD6A3C] bg-[#FFF7F2]"
-                : "border-[#ECE5DA] bg-white hover:border-[#BD6A3C]"
-            }
-          `}
+          className={`flex items-center gap-4 border rounded-2xl p-4 cursor-pointer transition ${
+            payment === "cod"
+              ? "border-[#BD6A3C] bg-[#FFF7F2]"
+              : "border-gray-200"
+          }`}
         >
+          <input
+            type="radio"
+            checked={payment === "cod"}
+            onChange={() => setPayment("cod")}
+          />
 
-          <div className="flex items-center gap-5">
-
-            <div
-              className={`
-                w-14
-                h-14
-                rounded-2xl
-                flex
-                items-center
-                justify-center
-
-                ${
-                  method === item.id
-                    ? "bg-[#BD6A3C] text-white"
-                    : "bg-[#F5F5F5] text-[#BD6A3C]"
-                }
-              `}
-            >
-              {item.icon}
-            </div>
-
-            <div>
-
-              <h3 className="font-bold text-lg text-[#2E2B27]">
-                {item.title}
-              </h3>
-
-              <p className="text-gray-500 text-sm">
-                {item.description}
-              </p>
-
-            </div>
-
-          </div>
+          <Wallet className="text-[#BD6A3C]" />
 
           <div>
+            <h3 className="font-semibold">
+              Cash on Delivery
+            </h3>
 
-            <input
-              type="radio"
-              checked={method === item.id}
-              onChange={() => setMethod(item.id)}
-              className="hidden"
-            />
-
-            {method === item.id && (
-              <CheckCircle2
-                size={28}
-                className="text-[#BD6A3C]"
-              />
-            )}
-
+            <p className="text-sm text-gray-500">
+              Pay when your pizza arrives.
+            </p>
           </div>
-
         </label>
 
-      ))}
+        <label
+          className={`flex items-center gap-4 border rounded-2xl p-4 cursor-pointer transition ${
+            payment === "razorpay"
+              ? "border-[#BD6A3C] bg-[#FFF7F2]"
+              : "border-gray-200"
+          }`}
+        >
+          <input
+            type="radio"
+            checked={payment === "razorpay"}
+            onChange={() => setPayment("razorpay")}
+          />
 
-      <div className="bg-[#FFF7F2] rounded-2xl p-5 mt-6">
+          <CreditCard className="text-[#BD6A3C]" />
 
-        <h3 className="font-bold text-[#2E2B27]">
-          Secure Payments
-        </h3>
+          <div>
+            <h3 className="font-semibold">
+              Razorpay
+            </h3>
 
-        <p className="text-gray-500 mt-2">
-          All transactions are encrypted using industry-standard
-          security. Your payment information is protected at every
-          step.
-        </p>
+            <p className="text-sm text-gray-500">
+              UPI • Cards • Net Banking • Wallets
+            </p>
+          </div>
+        </label>
 
       </div>
 
