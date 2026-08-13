@@ -15,6 +15,20 @@ export const createPaymentOrder = async (
 
   try {
 
+    if (!process.env.RAZORPAY_KEY_ID) {
+      return res.status(500).json({
+        success: false,
+        message: "Razorpay key is not configured on server",
+      });
+    }
+
+    if (!process.env.RAZORPAY_KEY_SECRET) {
+      return res.status(500).json({
+        success: false,
+        message: "Razorpay secret is not configured on server",
+      });
+    }
+
     const { orderId } = req.body;
 
 
@@ -53,7 +67,8 @@ export const createPaymentOrder = async (
 
     res.json({
       success: true,
-      paymentOrder
+      paymentOrder,
+      key: process.env.RAZORPAY_KEY_ID,
     });
 
 

@@ -5,6 +5,7 @@ import {
   ShoppingBag,
   XCircle,
   RefreshCw,
+  
 } from "lucide-react";
 
 import { Link } from "react-router-dom";
@@ -28,7 +29,7 @@ const Orders = () => {
     useState("");
 
   // ==========================================
-  // FETCH ORDERS
+  // FETCH ORDERS (initial load — shows spinner)
   // ==========================================
 
   const fetchOrders = async () => {
@@ -87,11 +88,56 @@ const Orders = () => {
   };
 
   // ==========================================
+  // SILENT REFETCH (background polling —
+  // no spinner, no error state disruption)
+  // ==========================================
+
+  const fetchOrdersSilently = async () => {
+    try {
+      const response = await getMyOrders();
+      const data = response.data;
+
+      const fetchedOrders = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.orders)
+        ? data.orders
+        : Array.isArray(data?.data)
+        ? data.data
+        : [];
+
+      setOrders(fetchedOrders);
+    } catch (err) {
+      // Fail silently on background polls so the UI
+      // doesn't flash an error every few seconds.
+      console.error(
+        "Background order refresh failed:",
+        err
+      );
+    }
+  };
+
+  // ==========================================
   // INITIAL LOAD
   // ==========================================
 
   useEffect(() => {
     fetchOrders();
+  }, []);
+
+  // ==========================================
+  // LIVE POLLING — REAL-TIME ORDER STATUS
+  // Re-fetches orders every 8 seconds so status
+  // changes made by the admin (Placed → Preparing
+  // → Out For Delivery → Delivered) show up here
+  // without the user needing to refresh the page.
+  // ==========================================
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchOrdersSilently();
+    }, 8000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // ==========================================

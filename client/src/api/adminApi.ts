@@ -13,23 +13,31 @@ export const getDashboard = () => {
 
 // Get all orders for admin
 export const getAllOrders = () => {
-  return api.get("/orders/admin");
+  return api.get("/orders/admin/all");
 };
 
 
 // Update order status
 export const updateOrderStatus = (
-  orderId: string,
-  status: string
+  id: string,
+  orderStatus: string
 ) => {
   return api.put(
-    `/orders/${orderId}/status`,
-    { status }
+    `/orders/admin/update/${id}`,
+    {
+      orderStatus,
+    }
   );
 };
+
+// ================= USERS =================
+
+// Get all users for admin
 export const getAllUsers = () => {
   return api.get("/admin/users");
 };
+
+
 // ================= COUPONS =================
 
 export const getAllCoupons = () => {
@@ -37,12 +45,12 @@ export const getAllCoupons = () => {
 };
 
 
-export const createCoupon = (data:any) => {
+export const createCoupon = (data: any) => {
   return api.post("/coupons", data);
 };
 
 
-export const deleteCoupon = (id:string) => {
+export const deleteCoupon = (id: string) => {
   return api.delete(`/coupons/${id}`);
 };
 // ================= INVENTORY =================
@@ -63,3 +71,5 @@ export const updateInventory = (
     }
   );
 };
+export const getAllReviews = () =>
+  api.get("/reviews/admin/all");

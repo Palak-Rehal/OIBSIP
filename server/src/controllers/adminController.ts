@@ -2,8 +2,14 @@ import User from "../models/User";
 import Pizza from "../models/Pizza";
 import Order from "../models/Order";
 
+
+// =====================================================
+// ADMIN DASHBOARD
+// =====================================================
+
 export const getDashboard = async (req: any, res: any) => {
   try {
+
     const totalUsers = await User.countDocuments();
 
     const totalPizzas = await Pizza.countDocuments();
@@ -11,43 +17,53 @@ export const getDashboard = async (req: any, res: any) => {
     const totalOrders = await Order.countDocuments();
 
     const pendingOrders = await Order.countDocuments({
-      status: { $ne: "Delivered" },
+      orderStatus: {
+        $nin: ["Delivered", "Cancelled"],
+      },
     });
 
     const deliveredOrders = await Order.find({
-      status: "Delivered",
+      orderStatus: "Delivered",
     });
 
     const revenue = deliveredOrders.reduce(
-      (sum, order) => sum + order.totalAmount,
+      (sum, order) => sum + (order.totalAmount || 0),
       0
     );
 
-  const recentOrders = await Order.find()
-  .populate("user", "name email")
-  .populate("items.pizza", "name")
-  .sort({ createdAt: -1 })
-  .limit(5);
 
-const latestUsers = await User.find()
-  .select("name email")
-  .sort({ createdAt: -1 })
-  .limit(5);
+    const recentOrders = await Order.find()
+      .populate("user", "name email")
+      .populate("items.pizza", "name")
+      .sort({ createdAt: -1 })
+      .limit(5);
 
-res.json({
-  success: true,
-  dashboard: {
-    totalUsers,
-    totalPizzas,
-    totalOrders,
-    pendingOrders,
-    revenue,
-  },
-  recentOrders,
-  latestUsers,
-});
+
+    const latestUsers = await User.find()
+      .select("name email role isVerified createdAt")
+      .sort({ createdAt: -1 })
+      .limit(5);
+
+
+    res.json({
+      success: true,
+
+      dashboard: {
+        totalUsers,
+        totalPizzas,
+        totalOrders,
+        pendingOrders,
+        revenue,
+      },
+
+      recentOrders,
+
+      latestUsers,
+    });
 
   } catch (error) {
+
+    console.error("Dashboard Error:", error);
 
     res.status(500).json({
       success: false,
@@ -55,4 +71,44 @@ res.json({
     });
 
   }
+};
+
+
+// =====================================================
+// GET ALL USERS
+// =====================================================
+
+export const getAllUsers = async (req: any, res: any) => {
+
+  try {
+
+    const users = await User.find()
+      .select("name email role isVerified createdAt")
+      .sort({ createdAt: -1 });
+
+
+    res.status(200).json({
+
+      success: true,
+
+      count: users.length,
+
+      users,
+
+    });
+
+  } catch (error) {
+
+    console.error("Get All Users Error:", error);
+
+    res.status(500).json({
+
+      success: false,
+
+      message: "Failed to fetch users",
+
+    });
+
+  }
+
 };

@@ -1,3 +1,12 @@
+import {
+  ArrowUpRight,
+  CheckCircle2,
+  Clock3,
+  Package,
+  ShoppingBag,
+  XCircle,
+} from "lucide-react";
+
 interface Order {
   id: string;
   customer: string;
@@ -5,7 +14,6 @@ interface Order {
   status: "Delivered" | "Pending" | "Preparing" | "Cancelled";
   date: string;
 }
-
 
 const orders: Order[] = [
   {
@@ -38,187 +46,425 @@ const orders: Order[] = [
   },
 ];
 
-
-const statusStyle = {
-  Delivered:
-    "bg-green-100 text-green-700",
-
-  Preparing:
-    "bg-blue-100 text-blue-700",
-
-  Pending:
-    "bg-yellow-100 text-yellow-700",
-
-  Cancelled:
-    "bg-red-100 text-red-700",
-};
-
-
 const OrdersTable = () => {
   return (
     <div
       className="
-      rounded-3xl
-      border
-      border-white/20
-      bg-white/10
-      backdrop-blur-xl
-      p-6
-      shadow-lg
+        h-full
+        rounded-[26px]
+        border
+        border-[#E8E2DA]
+        bg-white
+        p-5
+        shadow-[0_8px_30px_rgba(46,43,39,0.05)]
       "
     >
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
-      <div className="mb-6">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div
+            className="
+              flex
+              h-10
+              w-10
+              shrink-0
+              items-center
+              justify-center
+              rounded-xl
+              bg-[#F3E1D3]
+              text-[#BD6A3C]
+            "
+          >
+            <ShoppingBag size={19} />
+          </div>
 
-        <h2
+          <div>
+            <h2 className="text-lg font-black text-[#292622]">
+              Recent Orders
+            </h2>
+
+            <p className="mt-0.5 text-xs text-[#938A80]">
+              Latest customer orders
+            </p>
+          </div>
+        </div>
+
+        {/* View All */}
+
+        <button
           className="
-          text-xl
-          font-bold
-          text-[#4b2e1f]
-          dark:text-white
+            flex
+            items-center
+            gap-1
+            rounded-lg
+            px-2
+            py-1.5
+            text-[10px]
+            font-bold
+            text-[#BD6A3C]
+            transition
+            hover:bg-[#FFF1E5]
           "
         >
-          Recent Orders
-        </h2>
-
-
-        <p
-          className="
-          text-sm
-          text-gray-600
-          dark:text-gray-300
-          "
-        >
-          Latest customer orders
-        </p>
-
+          View all
+          <ArrowUpRight size={12} />
+        </button>
       </div>
 
+      {/* =====================================================
+          ORDER TABLE
+      ===================================================== */}
 
+      <div className="mt-5 overflow-x-auto">
+        <table className="w-full min-w-[650px]">
 
-      <div className="overflow-x-auto">
-
-        <table className="w-full">
+          {/* Table Header */}
 
           <thead>
+            <tr className="border-b border-[#EFEAE4]">
 
-            <tr
-              className="
-              border-b
-              border-gray-200
-              text-left
-              text-sm
-              text-gray-500
-              "
-            >
-
-              <th className="pb-4">
-                Order ID
+              <th
+                className="
+                  pb-3
+                  text-left
+                  text-[9px]
+                  font-bold
+                  uppercase
+                  tracking-wider
+                  text-[#9A9187]
+                "
+              >
+                Order
               </th>
 
-              <th className="pb-4">
+              <th
+                className="
+                  pb-3
+                  text-left
+                  text-[9px]
+                  font-bold
+                  uppercase
+                  tracking-wider
+                  text-[#9A9187]
+                "
+              >
                 Customer
               </th>
 
-              <th className="pb-4">
+              <th
+                className="
+                  pb-3
+                  text-left
+                  text-[9px]
+                  font-bold
+                  uppercase
+                  tracking-wider
+                  text-[#9A9187]
+                "
+              >
                 Amount
               </th>
 
-              <th className="pb-4">
+              <th
+                className="
+                  pb-3
+                  text-left
+                  text-[9px]
+                  font-bold
+                  uppercase
+                  tracking-wider
+                  text-[#9A9187]
+                "
+              >
                 Status
               </th>
 
-              <th className="pb-4">
-                Date
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody>
-
-            {orders.map((order) => (
-
-              <tr
-                key={order.id}
+              <th
                 className="
-                border-b
-                border-gray-100
-                last:border-none
-                text-sm
+                  pb-3
+                  text-right
+                  text-[9px]
+                  font-bold
+                  uppercase
+                  tracking-wider
+                  text-[#9A9187]
                 "
               >
+                Date
+              </th>
+            </tr>
+          </thead>
 
-                <td className="
-                py-4
-                font-semibold
-                text-[#4b2e1f]
-                dark:text-white
-                ">
-                  {order.id}
-                </td>
+          {/* =================================================
+              TABLE BODY
+          ================================================= */}
 
-
-                <td className="
-                py-4
-                text-gray-700
-                dark:text-gray-300
-                ">
-                  {order.customer}
-                </td>
-
-
-                <td className="
-                py-4
-                font-medium
-                ">
-                  {order.amount}
-                </td>
-
-
-                <td className="py-4">
-
-                  <span
-                    className={`
-                    rounded-full
-                    px-3
-                    py-1
-                    text-xs
-                    font-medium
-                    ${statusStyle[order.status]}
-                    `}
-                  >
-                    {order.status}
-                  </span>
-
-                </td>
-
-
-                <td className="
-                py-4
-                text-gray-500
-                dark:text-gray-400
-                ">
-                  {order.date}
-                </td>
-
-
-              </tr>
-
+          <tbody>
+            {orders.map((order) => (
+              <OrderRow
+                key={order.id}
+                order={order}
+              />
             ))}
-
           </tbody>
 
         </table>
-
       </div>
 
+      {/* =====================================================
+          FOOTER
+      ===================================================== */}
 
+      <div
+        className="
+          mt-4
+          flex
+          items-center
+          justify-between
+          rounded-xl
+          bg-[#FAF7F2]
+          px-3
+          py-2.5
+        "
+      >
+        <div className="flex items-center gap-2">
+
+          <CheckCircle2
+            size={14}
+            className="text-[#26924D]"
+          />
+
+          <span className="text-[10px] font-semibold text-[#70685F]">
+            Orders are being processed normally
+          </span>
+
+        </div>
+
+        <span className="text-[10px] font-bold text-[#9A9187]">
+          {orders.length} recent
+        </span>
+      </div>
     </div>
   );
 };
 
+/* ============================================================
+   ORDER ROW
+============================================================ */
+
+const OrderRow = ({
+  order,
+}: {
+  order: Order;
+}) => {
+  return (
+    <tr
+      className="
+        border-b
+        border-[#F1EDE8]
+        last:border-none
+        transition
+        hover:bg-[#FCFAF7]
+      "
+    >
+      {/* Order ID */}
+
+      <td className="py-3.5">
+        <div className="flex items-center gap-2.5">
+
+          <div
+            className="
+              flex
+              h-8
+              w-8
+              items-center
+              justify-center
+              rounded-lg
+              bg-[#F8F1EB]
+              text-[#BD6A3C]
+            "
+          >
+            <Package size={14} />
+          </div>
+
+          <div>
+            <p className="text-xs font-black text-[#302C28]">
+              {order.id}
+            </p>
+
+            <p className="mt-0.5 text-[9px] text-[#A29A91]">
+              Order
+            </p>
+          </div>
+
+        </div>
+      </td>
+
+      {/* Customer */}
+
+      <td className="py-3.5">
+
+        <div className="flex items-center gap-2.5">
+
+          <div
+            className="
+              flex
+              h-8
+              w-8
+              items-center
+              justify-center
+              rounded-full
+              bg-[#292622]
+              text-[10px]
+              font-black
+              text-white
+            "
+          >
+            {order.customer
+              .charAt(0)
+              .toUpperCase()}
+          </div>
+
+          <div>
+            <p className="text-xs font-bold text-[#302C28]">
+              {order.customer}
+            </p>
+
+            <p className="mt-0.5 text-[9px] text-[#A29A91]">
+              Customer
+            </p>
+          </div>
+
+        </div>
+
+      </td>
+
+      {/* Amount */}
+
+      <td className="py-3.5">
+
+        <p className="text-xs font-black text-[#292622]">
+          {order.amount}
+        </p>
+
+      </td>
+
+      {/* Status */}
+
+      <td className="py-3.5">
+        <Status status={order.status} />
+      </td>
+
+      {/* Date */}
+
+      <td className="py-3.5 text-right">
+
+        <p className="text-[10px] font-semibold text-[#81796F]">
+          {order.date}
+        </p>
+
+      </td>
+    </tr>
+  );
+};
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+const Status = ({
+  status,
+}: {
+  status: Order["status"];
+}) => {
+  if (status === "Delivered") {
+    return (
+      <span
+        className="
+          inline-flex
+          items-center
+          gap-1.5
+          rounded-full
+          bg-[#E7F5EB]
+          px-2.5
+          py-1
+          text-[9px]
+          font-bold
+          text-[#26924D]
+        "
+      >
+        <CheckCircle2 size={11} />
+        Delivered
+      </span>
+    );
+  }
+
+  if (status === "Preparing") {
+    return (
+      <span
+        className="
+          inline-flex
+          items-center
+          gap-1.5
+          rounded-full
+          bg-[#E8F0FB]
+          px-2.5
+          py-1
+          text-[9px]
+          font-bold
+          text-[#4676B9]
+        "
+      >
+        <Package size={11} />
+        Preparing
+      </span>
+    );
+  }
+
+  if (status === "Pending") {
+    return (
+      <span
+        className="
+          inline-flex
+          items-center
+          gap-1.5
+          rounded-full
+          bg-[#FFF7D9]
+          px-2.5
+          py-1
+          text-[9px]
+          font-bold
+          text-[#9A7412]
+        "
+      >
+        <Clock3 size={11} />
+        Pending
+      </span>
+    );
+  }
+
+  return (
+    <span
+      className="
+        inline-flex
+        items-center
+        gap-1.5
+        rounded-full
+        bg-[#FDEAEA]
+        px-2.5
+        py-1
+        text-[9px]
+        font-bold
+        text-[#C73A3A]
+      "
+    >
+      <XCircle size={11} />
+      Cancelled
+    </span>
+  );
+};
 
 export default OrdersTable;

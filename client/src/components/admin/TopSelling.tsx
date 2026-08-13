@@ -1,10 +1,15 @@
+import {
+  TrendingUp,
+  ShoppingBag,
+  ArrowUpRight,
+} from "lucide-react";
+
 interface Pizza {
   name: string;
   image: string;
   orders: number;
   revenue: string;
 }
-
 
 const pizzas: Pizza[] = [
   {
@@ -30,120 +35,195 @@ const pizzas: Pizza[] = [
   },
 ];
 
+const rankStyles = [
+  "bg-[#F3E1D3] text-[#BD6A3C]",
+  "bg-[#F1EEE9] text-[#766E64]",
+  "bg-[#F7EBDD] text-[#9A6A42]",
+];
 
 const TopSelling = () => {
   return (
-    <div
-      className="
-      rounded-3xl
-      border
-      border-white/20
-      bg-white/10
-      backdrop-blur-xl
-      p-6
-      shadow-lg
-      "
-    >
+    <div className="w-full">
 
-      <div className="mb-6">
+      {/* ================= HEADER ================= */}
 
-        <h2
+      <div className="mb-5 flex items-center justify-between">
+
+        <div className="flex items-center gap-3">
+
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F3E1D3] text-[#BD6A3C]">
+            <TrendingUp size={17} />
+          </div>
+
+          <div>
+            <h2 className="text-base font-black tracking-tight text-[#292622]">
+              Top Selling Pizzas
+            </h2>
+
+            <p className="mt-0.5 text-[11px] text-[#938A80]">
+              Best performing items
+            </p>
+          </div>
+
+        </div>
+
+        <button
           className="
-          text-xl
-          font-bold
-          text-[#4b2e1f]
-          dark:text-white
+            flex
+            items-center
+            gap-1
+            rounded-lg
+            px-2
+            py-1.5
+            text-[11px]
+            font-bold
+            text-[#BD6A3C]
+            transition
+            hover:bg-[#FAF3ED]
           "
         >
-          Top Selling Pizzas 🍕
-        </h2>
-
-
-        <p
-          className="
-          text-sm
-          text-gray-600
-          dark:text-gray-300
-          "
-        >
-          Best performing items
-        </p>
+          View all
+          <ArrowUpRight size={13} />
+        </button>
 
       </div>
 
 
+      {/* ================= PRODUCTS ================= */}
 
-      <div className="space-y-5">
+      <div className="space-y-2.5">
 
-        {pizzas.map((pizza) => (
+        {pizzas.map((pizza, index) => (
 
           <div
             key={pizza.name}
             className="
-            flex
-            items-center
-            justify-between
-            rounded-2xl
-            bg-white/20
-            p-3
-            transition
-            hover:bg-white/30
+              group
+              flex
+              items-center
+              gap-3
+              rounded-2xl
+              border
+              border-[#EEE8E1]
+              bg-[#FCFAF7]
+              px-3
+              py-2.5
+              transition-all
+              duration-200
+              hover:-translate-y-[1px]
+              hover:border-[#E4D3C5]
+              hover:bg-white
+              hover:shadow-[0_8px_20px_rgba(46,43,39,0.06)]
             "
           >
 
-            <div className="flex items-center gap-4">
+            {/* Rank */}
 
+            <div
+              className={`
+                flex
+                h-6
+                w-6
+                shrink-0
+                items-center
+                justify-center
+                rounded-lg
+                text-[10px]
+                font-black
+                ${rankStyles[index] || "bg-gray-100 text-gray-600"}
+              `}
+            >
+              {index + 1}
+            </div>
+
+
+            {/* Pizza Image */}
+
+            <div className="relative shrink-0">
 
               <img
                 src={pizza.image}
                 alt={pizza.name}
                 className="
-                h-14
-                w-14
-                rounded-xl
-                object-cover
+                  h-12
+                  w-12
+                  rounded-xl
+                  object-cover
+                  shadow-sm
+                  transition-transform
+                  duration-300
+                  group-hover:scale-105
                 "
               />
 
+              <div
+                className="
+                  absolute
+                  -bottom-1
+                  -right-1
+                  flex
+                  h-5
+                  w-5
+                  items-center
+                  justify-center
+                  rounded-full
+                  border-2
+                  border-white
+                  bg-[#292622]
+                  text-white
+                "
+              >
+                <ShoppingBag size={9} />
+              </div>
 
-              <div>
-
-                <h3
-                  className="
-                  font-semibold
-                  text-[#4b2e1f]
-                  dark:text-white
-                  "
-                >
-                  {pizza.name}
-                </h3>
+            </div>
 
 
-                <p
-                  className="
-                  text-sm
-                  text-gray-600
-                  dark:text-gray-300
-                  "
-                >
+            {/* Details */}
+
+            <div className="min-w-0 flex-1">
+
+              <h3
+                className="
+                  truncate
+                  text-[13px]
+                  font-black
+                  text-[#302C28]
+                "
+              >
+                {pizza.name}
+              </h3>
+
+              <div className="mt-1 flex items-center gap-1.5">
+
+                <span className="text-[10px] font-semibold text-[#91877C]">
                   {pizza.orders} orders
-                </p>
+                </span>
+
+                <span className="h-1 w-1 rounded-full bg-[#C9C0B7]" />
+
+                <span className="text-[10px] font-semibold text-[#26924D]">
+                  Popular
+                </span>
 
               </div>
 
             </div>
 
 
+            {/* Revenue */}
 
-            <div
-              className="
-              font-bold
-              text-[#8B4513]
-              "
-            >
-              {pizza.revenue}
+            <div className="shrink-0 text-right">
+
+              <p className="text-[13px] font-black text-[#292622]">
+                {pizza.revenue}
+              </p>
+
+              <p className="mt-0.5 text-[9px] font-medium text-[#A1988E]">
+                Revenue
+              </p>
+
             </div>
-
 
           </div>
 
@@ -152,9 +232,39 @@ const TopSelling = () => {
       </div>
 
 
+      {/* ================= FOOTER ================= */}
+
+      <div
+        className="
+          mt-4
+          flex
+          items-center
+          justify-between
+          rounded-xl
+          bg-[#F8F3EE]
+          px-3
+          py-2.5
+        "
+      >
+
+        <div className="flex items-center gap-2">
+
+          <span className="h-1.5 w-1.5 rounded-full bg-[#26924D]" />
+
+          <span className="text-[10px] font-semibold text-[#756C62]">
+            Top performers this month
+          </span>
+
+        </div>
+
+        <span className="text-[10px] font-black text-[#BD6A3C]">
+          {pizzas.length} items
+        </span>
+
+      </div>
+
     </div>
   );
 };
-
 
 export default TopSelling;

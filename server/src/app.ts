@@ -10,6 +10,9 @@ import paymentRoutes from "./routes/payment.routes";
 import reviewRoutes from "./routes/review.routes";
 import couponRoutes from "./routes/coupon.routes";
 import wishlistRoutes from "./routes/wishlist.routes";
+import adminRoutes from "./routes/adminRoutes";
+import inventoryRoutes from "./routes/inventory.routes";
+
 
 const app = express();
 app.use(cors());
@@ -28,6 +31,8 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/inventory", inventoryRoutes);
 
 app.get("/", (req, res) => {
   res.send("PizzaHub API Running...");

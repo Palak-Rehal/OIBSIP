@@ -3,6 +3,8 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 
+// ================= USER PAGES =================
+
 import Home from "./pages/user/Home";
 import Menu from "./pages/user/Menu";
 import PizzaDetails from "./pages/user/PizzaDetails";
@@ -19,10 +21,14 @@ import Contact from "./pages/user/Contact";
 import CustomizePizza from "./pages/user/CustomizePizza";
 import PizzaLab from "./pages/user/PizzaLab";
 
+// ================= PROFILE PAGES =================
+
 import Wishlist from "./pages/profile/Wishlist";
 import SavedAddresses from "./pages/profile/SavedAddresses";
 import AccountSettings from "./pages/profile/AccountSettings";
 import Notifications from "./pages/profile/Notifications";
+
+// ================= ADMIN PAGES =================
 
 import Dashboard from "./pages/admin/Dashboard";
 import AddPizza from "./pages/admin/AddPizza";
@@ -30,54 +36,106 @@ import Inventory from "./pages/admin/Inventory";
 import AdminOrders from "./pages/admin/Orders";
 import AdminUsers from "./pages/admin/Users";
 import AdminCoupons from "./pages/admin/Coupons";
+import Reviews from "./pages/admin/Reviews";
+import Settings from "./pages/admin/Settings";
+import AdminLogin from "./pages/admin/AdminLogin";
+
+// ================= AUTH =================
 
 import ForgotPassword from "./pages/user/ForgotPassword";
 import ResetPassword from "./pages/user/ResetPassword";
 import VerifyEmail from "./pages/user/VerifyEmail";
-import AdminLogin from "./pages/admin/AdminLogin";
+
+// ================= ROUTE GUARDS =================
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
+
+// ================= ADMIN LAYOUT =================
+
 import AdminLayout from "./components/layout/AdminLayout";
+
+// ================= TOAST =================
 
 import { Toaster } from "react-hot-toast";
 
+
 function App() {
   const location = useLocation();
+
+  /*
+   * Hide normal user Navbar/Footer on:
+   * - Authentication pages
+   * - Order success/details pages
+   * - Entire admin section
+   */
 
   const hideLayout =
     location.pathname === "/login" ||
     location.pathname === "/register" ||
     location.pathname === "/forgot-password" ||
     location.pathname.startsWith("/reset-password") ||
-    location.pathname.startsWith("/verify-email")||
-      location.pathname === "/order-success" ||
-  location.pathname.startsWith("/orders/");
-  location.pathname === "/admin/login";
+    location.pathname.startsWith("/verify-email") ||
+    location.pathname === "/order-success" ||
+    location.pathname.startsWith("/orders/") ||
+    location.pathname.startsWith("/admin");
+
 
   return (
     <div className="min-h-screen bg-[#FFF9F5] text-[#1F2937]">
 
+      {/* ================= USER NAVBAR ================= */}
+
       {!hideLayout && <Navbar />}
 
+
+      {/* ================= ROUTES ================= */}
+
       <Routes>
-        {/* ================= PUBLIC ROUTES ================= */}
 
-        <Route path="/" element={<Home />} />
+        {/* =====================================================
+            PUBLIC USER ROUTES
+        ===================================================== */}
 
-        <Route path="/menu" element={<Menu />} />
+        <Route
+          path="/"
+          element={<Home />}
+        />
 
-        <Route path="/pizza/:id" element={<PizzaDetails />} />
+        <Route
+          path="/menu"
+          element={<Menu />}
+        />
 
-        <Route path="/cart" element={<Cart />} />
+        <Route
+          path="/pizza/:id"
+          element={<PizzaDetails />}
+        />
 
-        <Route path="/contact" element={<Contact />} />
+        <Route
+          path="/cart"
+          element={<Cart />}
+        />
 
-        <Route path="/offers" element={<Offers />} />
+        <Route
+          path="/contact"
+          element={<Contact />}
+        />
 
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/offers"
+          element={<Offers />}
+        />
 
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        <Route
+          path="/register"
+          element={<Register />}
+        />
 
         <Route
           path="/forgot-password"
@@ -104,7 +162,10 @@ function App() {
           element={<PizzaLab />}
         />
 
-        {/* ================= PROTECTED USER ROUTES ================= */}
+
+        {/* =====================================================
+            PROTECTED USER ROUTES
+        ===================================================== */}
 
         <Route element={<ProtectedRoute />}>
 
@@ -155,39 +216,94 @@ function App() {
 
         </Route>
 
-        {/* ================= ADMIN ROUTES ================= */}
-        <Route path="/admin/login" element={<AdminLogin />} />
+
+        {/* =====================================================
+            ADMIN LOGIN
+        ===================================================== */}
+
+        <Route
+          path="/admin/login"
+          element={<AdminLogin />}
+        />
+
+
+        {/* =====================================================
+            PROTECTED ADMIN ROUTES
+        ===================================================== */}
+
         <Route element={<AdminRoute />}>
 
-          <Route element={<AdminLayout />}>
+          <Route
+            path="/admin"
+            element={<AdminLayout />}
+          >
+
+            {/* Dashboard */}
 
             <Route
-              path="/admin/dashboard"
+              index
               element={<Dashboard />}
             />
 
             <Route
-              path="/admin/add-pizza"
+              path="dashboard"
+              element={<Dashboard />}
+            />
+
+
+            {/* Pizza Management */}
+
+            <Route
+              path="add-pizza"
               element={<AddPizza />}
             />
 
+
+            {/* Inventory */}
+
             <Route
-              path="/admin/inventory"
+              path="inventory"
               element={<Inventory />}
             />
 
+
+            {/* Orders */}
+
             <Route
-              path="/admin/orders"
+              path="orders"
               element={<AdminOrders />}
             />
 
+
+            {/* Users */}
+
             <Route
-              path="/admin/users"
+              path="users"
               element={<AdminUsers />}
             />
+
+
+            {/* Coupons */}
+
             <Route
-              path="/admin/coupons"
+              path="coupons"
               element={<AdminCoupons />}
+            />
+
+
+            {/* Reviews */}
+
+            <Route
+              path="reviews"
+              element={<Reviews />}
+            />
+
+
+            {/* Settings */}
+
+            <Route
+              path="settings"
+              element={<Settings />}
             />
 
           </Route>
@@ -196,12 +312,19 @@ function App() {
 
       </Routes>
 
+
+      {/* ================= USER FOOTER ================= */}
+
       {!hideLayout && <Footer />}
+
+
+      {/* ================= TOASTER ================= */}
 
       <Toaster
         position="top-right"
         toastOptions={{
           duration: 3000,
+
           style: {
             borderRadius: "16px",
             background: "#ffffff",

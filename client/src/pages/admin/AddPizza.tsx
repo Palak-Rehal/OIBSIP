@@ -6,12 +6,13 @@ import {
   Tag,
   FileText,
   Layers,
+  X,
+  Image as ImageIcon,
+  Save,
+  CheckCircle2,
 } from "lucide-react";
 
-
 const AddPizza = () => {
-
-
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -22,410 +23,447 @@ const AddPizza = () => {
     stock: "Available",
   });
 
-
+  const [imagePreview, setImagePreview] =
+    useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-
   };
 
-
-
-
-  const handleSubmit = (
-    e: React.FormEvent
+  const handleImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
+    const file = e.target.files?.[0];
 
+    if (!file) return;
+
+    const imageUrl = URL.createObjectURL(file);
+
+    setImagePreview(imageUrl);
+  };
+
+  const removeImage = () => {
+    setImagePreview(null);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     console.log(formData);
 
-    // connect add pizza API here
-
+    // Connect add pizza API here
   };
 
-
-
-
   return (
+    <div className="min-h-screen bg-[#F7F5F2] px-4 py-6 md:px-6 lg:px-8">
 
-    <div
-      className="
-        min-h-screen
-        bg-[#FAF7F2]
-        p-6
-        md:p-10
-      "
-    >
+      <div className="max-w-6xl mx-auto">
 
+        {/* ================= HEADER ================= */}
 
-      <div
-        className="
-          max-w-5xl
-          mx-auto
-        "
-      >
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
 
+          <div>
+            <div className="flex items-center gap-2 mb-1">
 
-        {/* Header */}
+              <div className="w-8 h-8 rounded-xl bg-[#BD6A3C]/10 flex items-center justify-center">
+                <Pizza
+                  size={17}
+                  className="text-[#BD6A3C]"
+                />
+              </div>
 
-        <div className="mb-10">
+              <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#BD6A3C]">
+                Pizza Management
+              </span>
 
-          <h1
-            className="
-              text-4xl
-              font-black
-              text-[#2E2B27]
-            "
-          >
-            Add New Pizza 🍕
-          </h1>
+            </div>
 
+            <h1 className="text-2xl md:text-3xl font-black text-[#2E2B27]">
+              Add New Pizza
+            </h1>
 
-          <p className="text-gray-500 mt-3 text-lg">
-            Create and manage delicious pizzas for your customers.
-          </p>
+            <p className="text-sm text-gray-500 mt-1">
+              Create a new pizza for your menu.
+            </p>
+          </div>
+
+          <div className="hidden sm:flex items-center gap-2 text-xs text-gray-500 bg-white border border-gray-100 px-4 py-2.5 rounded-xl shadow-sm">
+
+            <CheckCircle2
+              size={15}
+              className="text-green-500"
+            />
+
+            Admin Mode
+
+          </div>
 
         </div>
 
 
-
-
-
+        {/* ================= FORM ================= */}
 
         <form
           onSubmit={handleSubmit}
-          className="
-            bg-white
-            rounded-[35px]
-            shadow-xl
-            p-8
-            md:p-12
-            space-y-8
-          "
+          className="space-y-5"
         >
 
+          {/* ================= TOP CARD ================= */}
 
+          <div className="grid lg:grid-cols-[280px_1fr] gap-5">
 
-          {/* Image Upload */}
+            {/* IMAGE */}
 
-          <div>
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
 
-            <label
-              className="
-                font-bold
-                text-[#2E2B27]
-              "
-            >
-              Pizza Image
-            </label>
+              <div className="flex items-center justify-between mb-3">
 
+                <div>
+                  <h2 className="font-bold text-[#2E2B27]">
+                    Pizza Image
+                  </h2>
 
-            <div
-              className="
-                mt-3
-                h-48
-                border-2
-                border-dashed
-                border-[#E7DED3]
-                rounded-3xl
-                flex
-                flex-col
-                items-center
-                justify-center
-                text-gray-400
-                hover:border-[#BD6A3C]
-                transition
-                cursor-pointer
-              "
-            >
+                  <p className="text-xs text-gray-400 mt-1">
+                    JPG, PNG up to 5MB
+                  </p>
+                </div>
 
-              <Upload size={40}/>
+                <ImageIcon
+                  size={18}
+                  className="text-[#BD6A3C]"
+                />
 
-              <p className="mt-3">
-                Upload Pizza Image
-              </p>
+              </div>
+
+              <label className="block cursor-pointer">
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+
+                {imagePreview ? (
+
+                  <div className="relative">
+
+                    <img
+                      src={imagePreview}
+                      alt="Pizza preview"
+                      className="w-full h-44 object-cover rounded-xl"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={removeImage}
+                      className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-black transition"
+                    >
+                      <X size={15} />
+                    </button>
+
+                  </div>
+
+                ) : (
+
+                  <div className="h-44 rounded-xl border-2 border-dashed border-[#E8DED4] bg-[#FCFAF7] flex flex-col items-center justify-center hover:border-[#BD6A3C] hover:bg-[#BD6A3C]/5 transition">
+
+                    <div className="w-11 h-11 rounded-xl bg-[#BD6A3C]/10 flex items-center justify-center">
+
+                      <Upload
+                        size={20}
+                        className="text-[#BD6A3C]"
+                      />
+
+                    </div>
+
+                    <p className="text-sm font-semibold text-[#2E2B27] mt-3">
+                      Upload image
+                    </p>
+
+                    <p className="text-xs text-gray-400 mt-1">
+                      Click to browse
+                    </p>
+
+                  </div>
+
+                )}
+
+              </label>
 
             </div>
 
 
+            {/* BASIC DETAILS */}
+
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+
+              <div className="flex items-center gap-2 mb-5">
+
+                <div className="w-8 h-8 rounded-lg bg-[#BD6A3C]/10 flex items-center justify-center">
+                  <Pizza
+                    size={16}
+                    className="text-[#BD6A3C]"
+                  />
+                </div>
+
+                <div>
+                  <h2 className="font-bold text-[#2E2B27]">
+                    Basic Information
+                  </h2>
+
+                  <p className="text-xs text-gray-400">
+                    Main pizza details
+                  </p>
+                </div>
+
+              </div>
+
+
+              <div className="grid md:grid-cols-2 gap-4">
+
+                <InputBox
+                  icon={<Pizza size={17} />}
+                  label="Pizza Name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Cheese Burst"
+                />
+
+                <InputBox
+                  icon={<Tag size={17} />}
+                  label="Category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  placeholder="Classic / Premium"
+                />
+
+                <InputBox
+                  icon={<IndianRupee size={17} />}
+                  label="Price"
+                  name="price"
+                  type="number"
+                  value={formData.price}
+                  onChange={handleChange}
+                  placeholder="299"
+                />
+
+                <SelectBox
+                  label="Pizza Size"
+                  name="size"
+                  value={formData.size}
+                  onChange={handleChange}
+                  options={[
+                    "Small",
+                    "Medium",
+                    "Large",
+                  ]}
+                />
+
+              </div>
+
+            </div>
+
           </div>
 
 
+          {/* ================= DESCRIPTION / INGREDIENTS ================= */}
+
+          <div className="grid lg:grid-cols-2 gap-5">
+
+            {/* INGREDIENTS */}
+
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+
+              <div className="flex items-center gap-2 mb-4">
+
+                <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
+
+                  <Layers
+                    size={17}
+                    className="text-orange-500"
+                  />
+
+                </div>
+
+                <div>
+
+                  <h2 className="font-bold text-[#2E2B27]">
+                    Ingredients
+                  </h2>
+
+                  <p className="text-xs text-gray-400">
+                    List the pizza ingredients
+                  </p>
+
+                </div>
+
+              </div>
+
+              <textarea
+                name="ingredients"
+                value={formData.ingredients}
+                onChange={handleChange}
+                placeholder="Mozzarella, tomato, onion, capsicum..."
+                className="w-full h-28 resize-none border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#BD6A3C] focus:ring-2 focus:ring-[#BD6A3C]/10 transition"
+              />
+
+            </div>
 
 
+            {/* DESCRIPTION */}
 
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
 
+              <div className="flex items-center gap-2 mb-4">
 
-          {/* Name + Category */}
+                <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
 
-          <div
-            className="
-              grid
-              md:grid-cols-2
-              gap-6
-            "
-          >
+                  <FileText
+                    size={17}
+                    className="text-blue-500"
+                  />
 
-            <InputBox
-              icon={<Pizza/>}
-              label="Pizza Name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Cheese Burst Pizza"
-            />
+                </div>
 
+                <div>
 
+                  <h2 className="font-bold text-[#2E2B27]">
+                    Description
+                  </h2>
 
-            <InputBox
-              icon={<Tag/>}
-              label="Category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              placeholder="Veg / Non Veg"
-            />
+                  <p className="text-xs text-gray-400">
+                    Short description for customers
+                  </p>
+
+                </div>
+
+              </div>
+
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="A delicious cheesy pizza with..."
+                className="w-full h-28 resize-none border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#BD6A3C] focus:ring-2 focus:ring-[#BD6A3C]/10 transition"
+              />
+
+            </div>
 
           </div>
 
 
+          {/* ================= INVENTORY ================= */}
 
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
 
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
+              <div className="flex items-center gap-3">
 
+                <div className="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center">
 
-          {/* Price + Size */}
+                  <Layers
+                    size={18}
+                    className="text-green-600"
+                  />
 
-          <div
-            className="
-              grid
-              md:grid-cols-2
-              gap-6
-            "
-          >
+                </div>
 
+                <div>
 
-            <InputBox
-              icon={<IndianRupee/>}
-              label="Price"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              placeholder="299"
-            />
+                  <h2 className="font-bold text-[#2E2B27]">
+                    Availability
+                  </h2>
 
+                  <p className="text-xs text-gray-400">
+                    Control whether customers can order this pizza.
+                  </p>
 
+                </div>
 
-            <div>
-
-              <label className="font-bold">
-                Pizza Size
-              </label>
+              </div>
 
 
               <select
-                name="size"
-                value={formData.size}
+                name="stock"
+                value={formData.stock}
                 onChange={handleChange}
-                className="
-                  mt-3
-                  w-full
-                  border
-                  border-gray-200
-                  rounded-2xl
-                  p-4
-                  outline-none
-                "
+                className="w-full sm:w-52 border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold outline-none focus:border-[#BD6A3C] focus:ring-2 focus:ring-[#BD6A3C]/10"
               >
 
-                <option>
-                  Small
+                <option value="Available">
+                  Available
                 </option>
 
-                <option>
-                  Medium
-                </option>
-
-                <option>
-                  Large
+                <option value="Out Of Stock">
+                  Out Of Stock
                 </option>
 
               </select>
 
             </div>
 
-
           </div>
 
 
+          {/* ================= ACTION BAR ================= */}
+
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+
+              <span className="w-2 h-2 rounded-full bg-green-500" />
+
+              All changes will be saved when you submit.
+
+            </div>
 
 
+            <div className="flex gap-3">
 
+              <button
+                type="button"
+                className="px-5 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition"
+              >
+                Cancel
+              </button>
 
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#BD6A3C] hover:bg-[#A95731] text-white text-sm font-bold shadow-lg shadow-[#BD6A3C]/20 transition"
+              >
 
-          {/* Ingredients */}
+                <Save size={17} />
 
-          <div>
+                Add Pizza
 
-            <label className="font-bold">
-              Ingredients
-            </label>
+              </button>
 
-
-            <textarea
-              name="ingredients"
-              value={formData.ingredients}
-              onChange={handleChange}
-              placeholder="Cheese, Tomato, Onion..."
-              className="
-                mt-3
-                w-full
-                border
-                border-gray-200
-                rounded-2xl
-                p-4
-                h-32
-                outline-none
-              "
-            />
-
-          </div>
-
-
-
-
-
-
-
-          {/* Description */}
-
-          <div>
-
-            <label className="font-bold flex gap-2">
-              <FileText size={20}/>
-              Description
-            </label>
-
-
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Describe your pizza..."
-              className="
-                mt-3
-                w-full
-                border
-                border-gray-200
-                rounded-2xl
-                p-4
-                h-32
-                outline-none
-              "
-            />
+            </div>
 
           </div>
-
-
-
-
-
-
-
-          {/* Stock */}
-
-          <div>
-
-            <label className="font-bold flex gap-2">
-              <Layers size={20}/>
-              Stock Status
-            </label>
-
-
-            <select
-              name="stock"
-              value={formData.stock}
-              onChange={handleChange}
-              className="
-                mt-3
-                w-full
-                border
-                border-gray-200
-                rounded-2xl
-                p-4
-              "
-            >
-
-              <option>
-                Available
-              </option>
-
-              <option>
-                Out Of Stock
-              </option>
-
-            </select>
-
-
-          </div>
-
-
-
-
-
-
-
-
-          <button
-            type="submit"
-            className="
-              w-full
-              bg-[#BD6A3C]
-              text-white
-              py-4
-              rounded-full
-              font-bold
-              text-lg
-              hover:bg-[#a95731]
-              transition
-            "
-          >
-
-            Add Pizza
-
-          </button>
-
-
-
-
 
         </form>
 
-
       </div>
 
-
     </div>
-
   );
-
 };
 
 
-
-
-
-
-
+/* ================= INPUT ================= */
 
 const InputBox = ({
   icon,
@@ -434,64 +472,88 @@ const InputBox = ({
   value,
   onChange,
   placeholder,
-}:any)=>{
+  type = "text",
+}: {
+  icon: React.ReactNode;
+  label: string;
+  name: string;
+  value: string;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => void;
+  placeholder: string;
+  type?: string;
+}) => {
+  return (
+    <div>
 
+      <label className="text-xs font-bold text-[#514B44]">
+        {label}
+      </label>
 
-return (
+      <div className="mt-1.5 flex items-center border border-gray-200 rounded-xl px-3 focus-within:border-[#BD6A3C] focus-within:ring-2 focus-within:ring-[#BD6A3C]/10 transition">
 
-<div>
+        <span className="text-gray-400">
+          {icon}
+        </span>
 
-<label className="font-bold">
-{label}
-</label>
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className="w-full px-3 py-2.5 text-sm outline-none bg-transparent"
+        />
 
+      </div>
 
-<div
-className="
-mt-3
-flex
-items-center
-border
-border-gray-200
-rounded-2xl
-px-4
-"
->
-
-<span className="text-gray-400">
-{icon}
-</span>
-
-
-<input
-
-name={name}
-
-value={value}
-
-onChange={onChange}
-
-placeholder={placeholder}
-
-className="
-w-full
-p-4
-outline-none
-"
-
-/>
-
-
-</div>
-
-
-</div>
-
-);
-
+    </div>
+  );
 };
 
 
+/* ================= SELECT ================= */
 
+const SelectBox = ({
+  label,
+  name,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => void;
+  options: string[];
+}) => {
+  return (
+    <div>
+
+      <label className="text-xs font-bold text-[#514B44]">
+        {label}
+      </label>
+
+      <select
+        name={name}
+        value={value}
+        onChange={onChange}
+        className="mt-1.5 w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#BD6A3C] focus:ring-2 focus:ring-[#BD6A3C]/10 bg-white"
+      >
+
+        {options.map((option) => (
+          <option key={option}>
+            {option}
+          </option>
+        ))}
+
+      </select>
+
+    </div>
+  );
+};
 
 export default AddPizza;

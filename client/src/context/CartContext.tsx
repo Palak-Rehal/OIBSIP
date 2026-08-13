@@ -6,6 +6,7 @@ import {
 } from "react";
 import type { ReactNode } from "react";
 import * as cartApi from "../api/cartApi";
+import { useAuth } from "./AuthContext";
 
 interface CartItem {
 
@@ -84,8 +85,11 @@ export const CartProvider = ({
 }: {
   children: ReactNode;
 }) => {
+
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const { user } = useAuth();
 
   const fetchCart = async () => {
     setLoading(true);
@@ -110,8 +114,13 @@ export const CartProvider = ({
 
 
   useEffect(() => {
-    fetchCart();
-  }, []);
+    if (user) {
+      fetchCart();
+    } else {
+      setCart([]);
+      setLoading(false);
+    }
+  }, [user]);
 
   const addItem = async (
     pizzaId: string,

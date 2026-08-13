@@ -1,9 +1,22 @@
 import express from "express";
-import { getDashboard } from "../controllers/adminController";
-import  protect from "../middleware/auth.middleware";
-import  {adminOnly } from "../middleware/auth.middleware";
+
+import {
+  getDashboard,
+  getAllUsers,
+} from "../controllers/adminController";
+
+import protect, {
+  adminOnly,
+} from "../middleware/auth.middleware";
+
 
 const router = express.Router();
+
+
+// =====================================================
+// ADMIN DASHBOARD
+// GET /api/admin/dashboard
+// =====================================================
 
 router.get(
   "/dashboard",
@@ -11,5 +24,19 @@ router.get(
   adminOnly,
   getDashboard
 );
+
+
+// =====================================================
+// ALL USERS
+// GET /api/admin/users
+// =====================================================
+
+router.get(
+  "/users",
+  protect,
+  adminOnly,
+  getAllUsers
+);
+
 
 export default router;

@@ -5,19 +5,13 @@ import User from "../models/User";
 import generateToken from "../utils/generateToken";
 import { AuthRequest } from "../middleware/auth.middleware";
 import crypto from "crypto";
-import { sendVerificationEmail } from "../utils/sendEmail";
-import nodemailer from "nodemailer";
+import {
+  sendVerificationEmail,
+  sendResetPasswordEmail,
+} from "../utils/sendEmail";
 import dotenv from "dotenv";
 
 dotenv.config();
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
 
 // ================= REGISTER =================
 export const registerUser = async (req: Request, res: Response) => {
@@ -209,6 +203,11 @@ export const forgotPassword = async (
   req: Request,
   res: Response
 ) => {
+
+  console.log("🔥 FORGOT PASSWORD API CALLED");
+  console.log("📩 Request body:", req.body);
+
+
   try {
     const { email } = req.body;
 
@@ -232,26 +231,14 @@ export const forgotPassword = async (
     );
 
     await user.save();
-
-    const resetUrl =
-      `http://localhost:5173/reset-password/${resetToken}`;
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: user.email,
-      subject: "Reset Password",
-      html: `
-        <h2>PizzaHub Password Reset</h2>
-
-        <p>Click the link below to reset your password.</p>
-
-        <a href="${resetUrl}">
-          Reset Password
-        </a>
-
-        <p>This link expires in 15 minutes.</p>
-      `,
-    });
+    console.log("ABOUT TO SEND RESET EMAIL");
+    console.log("Email:", user.email);
+    console.log("Reset Token:", resetToken);
+    await sendResetPasswordEmail(
+      user.email,
+      user.name,
+      resetToken
+    );
 
     return res.json({
       success: true,

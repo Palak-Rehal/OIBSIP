@@ -244,3 +244,30 @@ export const deleteReview = async (
 
   }
 };
+// ===============================
+// Get All Reviews - Admin
+// ===============================
+export const getAllReviews = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const reviews = await Review.find()
+      .populate("user", "name email profileImage")
+      .populate("pizza", "name")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: reviews.length,
+      reviews,
+    });
+  } catch (error) {
+    console.error("Get all reviews error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch reviews",
+    });
+  }
+};
