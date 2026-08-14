@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import {
-  Sparkles,
+  Flame,
   Wand2,
   ChefHat,
   ShoppingBag,
@@ -55,28 +55,34 @@ const crusts = [
   },
 ];
 
+// Matches server/src/seeds/inventorySeed.ts exactly
+// so stock actually decrements on checkout.
 const sauces = [
   {
-    name: "Classic Tomato",
+    name: "Pizza Sauce",
     price: 0,
   },
   {
-    name: "BBQ",
+    name: "Spicy Tomato",
     price: 20,
   },
   {
-    name: "Peri Peri",
+    name: "BBQ Sauce",
+    price: 20,
+  },
+  {
+    name: "Garlic Sauce",
     price: 25,
   },
   {
-    name: "Garlic Butter",
+    name: "Pesto Sauce",
     price: 30,
   },
 ];
 
 const cheeses = [
   {
-    name: "Regular",
+    name: "Regular Cheese",
     price: 0,
   },
   {
@@ -98,6 +104,14 @@ const toppingOptions = [
   "Onion",
   "Capsicum",
   "Jalapeños",
+];
+
+const STEPS = [
+  "Size",
+  "Crust",
+  "Sauce",
+  "Cheese",
+  "Toppings",
 ];
 
 /* =========================================================
@@ -141,6 +155,17 @@ const PizzaLab = () => {
     selectedSauce.price +
     selectedCheese.price +
     toppingPrice;
+
+  /* -------------------------------------------------------
+     BUILD PROGRESS (how far into the ticket you are)
+  ------------------------------------------------------- */
+
+  const completedCount =
+    1 + // size always has a default
+    1 + // crust always has a default
+    1 + // sauce always has a default
+    1 + // cheese always has a default
+    (selectedToppings.length > 0 ? 1 : 0);
 
   /* -------------------------------------------------------
      SURPRISE ME
@@ -192,108 +217,40 @@ const PizzaLab = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="
-        min-h-screen
-        bg-[#F7F5F0]
-        text-[#22281F]
-      "
+      className="min-h-screen bg-[#1C1712] text-[#F3E9DA]"
     >
       {/* ===================================================
-          HERO HEADER
+          HERO HEADER — "the oven glow"
       =================================================== */}
 
-      <section className="relative overflow-hidden">
-        {/* Decorative background */}
+      <section className="relative overflow-hidden border-b border-[#33291D]">
 
-        <div className="
-          absolute
-          -top-32
-          -right-32
-          w-96
-          h-96
-          rounded-full
-          bg-[#D8531F]/10
-          blur-3xl
-        " />
+        <div className="absolute -top-32 -right-24 w-[420px] h-[420px] rounded-full bg-[#E5501C]/20 blur-[110px]" />
+        <div className="absolute -bottom-40 -left-24 w-[380px] h-[380px] rounded-full bg-[#F0A93E]/10 blur-[110px]" />
 
-        <div className="
-          absolute
-          -bottom-40
-          -left-20
-          w-80
-          h-80
-          rounded-full
-          bg-[#5B8C5A]/10
-          blur-3xl
-        " />
+        <div className="relative max-w-[1500px] mx-auto px-5 sm:px-8 pt-14 pb-10">
 
-        <div className="
-          relative
-          max-w-[1500px]
-          mx-auto
-          px-5
-          sm:px-8
-          pt-10
-          pb-8
-        ">
-          <div className="
-            flex
-            flex-col
-            lg:flex-row
-            lg:items-end
-            lg:justify-between
-            gap-8
-          ">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+
             {/* Heading */}
 
             <div>
-              <div className="
-                inline-flex
-                items-center
-                gap-2
-                px-4
-                py-2
-                rounded-full
-                bg-white
-                border
-                border-[#E8DFD4]
-                shadow-sm
-                text-[#D8531F]
-                text-sm
-                font-bold
-              ">
-                <Sparkles size={16} />
-                Premium Pizza Experience
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#2A2118] border border-[#443626] text-[#F0A93E] text-xs font-black uppercase tracking-[0.16em]">
+                <Flame size={14} />
+                Fired to order
               </div>
 
-              <h1 className="
-                mt-5
-                text-4xl
-                sm:text-5xl
-                lg:text-6xl
-                font-black
-                tracking-tight
-              ">
+              <h1 className="mt-5 text-4xl sm:text-5xl lg:text-[64px] font-black tracking-tight leading-[0.95]">
                 Build Your
-                <span className="
-                  block
-                  text-[#D8531F]
-                ">
+                <span className="block text-[#E5501C]">
                   Perfect Pizza
                 </span>
               </h1>
 
-              <p className="
-                mt-4
-                max-w-2xl
-                text-[#6D6A63]
-                text-base
-                sm:text-lg
-                leading-7
-              ">
-                Choose your size, crust, sauce, cheese
-                and favourite toppings. Create a pizza
-                that's completely yours.
+              <p className="mt-4 max-w-xl text-[#B9A88C] text-base sm:text-lg leading-7">
+                Pick your base, sauce, cheese and toppings.
+                Every pizza gets punched into the kitchen
+                exactly the way you build it.
               </p>
             </div>
 
@@ -302,101 +259,56 @@ const PizzaLab = () => {
             <motion.button
               type="button"
               onClick={randomPizza}
-              whileHover={{
-                y: -3,
-                scale: 1.02,
-              }}
-              whileTap={{
-                scale: 0.97,
-              }}
-              className="
-                group
-                inline-flex
-                items-center
-                justify-center
-                gap-3
-                px-6
-                py-4
-                rounded-2xl
-                bg-[#22281F]
-                text-white
-                font-bold
-                shadow-xl
-                shadow-black/10
-                transition
-                whitespace-nowrap
-              "
+              whileHover={{ y: -3, scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              className="group inline-flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-[#E5501C] text-[#1C1712] font-black shadow-[0_16px_40px_rgba(229,80,28,0.35)] transition whitespace-nowrap"
             >
-              <span className="
-                flex
-                items-center
-                justify-center
-                w-10
-                h-10
-                rounded-xl
-                bg-white/10
-                group-hover:bg-[#D8531F]
-                transition
-              ">
+              <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#1C1712]/10 group-hover:bg-[#1C1712]/20 transition">
                 <Wand2 size={19} />
               </span>
-
               Surprise Me
             </motion.button>
           </div>
 
-          {/* Progress-style indicators */}
+          {/* ================================================
+              TICKET PROGRESS STRIP
+              (signature element — real sequential steps,
+              so numbering here actually carries meaning)
+          ================================================ */}
 
-          <div className="
-            mt-8
-            flex
-            flex-wrap
-            items-center
-            gap-3
-          ">
-            <div className="
-              flex
-              items-center
-              gap-2
-              px-4
-              py-2
-              rounded-full
-              bg-white
-              border
-              border-[#E8DFD4]
-              text-sm
-              font-semibold
-              text-[#55514A]
-            ">
-              <ChefHat
-                size={16}
-                className="text-[#D8531F]"
-              />
-              Made your way
+          <div className="mt-10 bg-[#241D16] border border-[#3B2F21] rounded-2xl px-5 py-4">
+
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#8A7A62] font-bold">
+                Your Build
+              </p>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#F0A93E] font-bold">
+                {completedCount} / {STEPS.length} picked
+              </p>
             </div>
 
-            <div className="
-              px-4
-              py-2
-              rounded-full
-              bg-[#FCE4D6]
-              text-[#B8431A]
-              text-sm
-              font-bold
-            ">
-              {selectedToppings.length} toppings
-            </div>
-
-            <div className="
-              px-4
-              py-2
-              rounded-full
-              bg-[#EAF2E8]
-              text-[#5B8C5A]
-              text-sm
-              font-bold
-            ">
-              Fresh ingredients
+            <div className="flex gap-1.5">
+              {STEPS.map((step, i) => (
+                <div
+                  key={step}
+                  className="flex-1"
+                >
+                  <div className="h-1.5 rounded-full bg-[#3B2F21] overflow-hidden">
+                    <div
+                      className="h-full bg-[#E5501C] rounded-full transition-all duration-500"
+                      style={{
+                        width:
+                          i < completedCount
+                            ? "100%"
+                            : "0%",
+                      }}
+                    />
+                  </div>
+                  <p className="mt-1.5 text-[10px] font-bold text-[#8A7A62]">
+                    {i + 1}. {step}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -406,140 +318,20 @@ const PizzaLab = () => {
           MAIN BUILDER
       =================================================== */}
 
-      <main className="
-        max-w-[1500px]
-        mx-auto
-        px-5
-        sm:px-8
-        pb-16
-      ">
-        <div className="
-          grid
-          xl:grid-cols-[390px_minmax(0,1fr)_360px]
-          gap-6
-          items-start
-        ">
+      <main className="max-w-[1500px] mx-auto px-5 sm:px-8 py-10">
+        <div className="grid xl:grid-cols-[390px_minmax(0,1fr)_360px] gap-6 items-start">
+
           {/* =================================================
               LEFT — PREVIEW
           ================================================= */}
 
           <div className="xl:sticky xl:top-24">
-            <div className="
-              rounded-[30px]
-              bg-white
-              border
-              border-[#E8DFD4]
-              shadow-[0_20px_60px_rgba(50,40,30,0.08)]
-              overflow-hidden
-            ">
-              {/* Card header */}
-
-              <div className="
-                px-6
-                pt-6
-                flex
-                items-center
-                justify-between
-              ">
-                <div>
-                  <p className="
-                    text-xs
-                    uppercase
-                    tracking-[0.18em]
-                    text-[#9A958C]
-                    font-bold
-                  ">
-                    Live Preview
-                  </p>
-
-                  <h2 className="
-                    mt-1
-                    text-xl
-                    font-black
-                  ">
-                    Your Creation
-                  </h2>
-                </div>
-
-                <div className="
-                  w-10
-                  h-10
-                  rounded-xl
-                  bg-[#FCE4D6]
-                  text-[#D8531F]
-                  flex
-                  items-center
-                  justify-center
-                ">
-                  <ShoppingBag size={18} />
-                </div>
-              </div>
-
-              <div className="p-5">
-                <PizzaPreview
-                  size={selectedSize.name}
-                  crust={selectedCrust.name}
-                  cheese={selectedCheese.name}
-                  toppings={selectedToppings}
-                />
-              </div>
-
-              {/* Mini summary */}
-
-              <div className="
-                mx-5
-                mb-5
-                p-4
-                rounded-2xl
-                bg-[#F7F5F0]
-                border
-                border-[#ECE5DA]
-              ">
-                <div className="
-                  flex
-                  justify-between
-                  text-sm
-                  mb-2
-                ">
-                  <span className="text-[#817C73]">
-                    Size
-                  </span>
-
-                  <span className="font-bold">
-                    {selectedSize.name}
-                  </span>
-                </div>
-
-                <div className="
-                  flex
-                  justify-between
-                  text-sm
-                  mb-2
-                ">
-                  <span className="text-[#817C73]">
-                    Crust
-                  </span>
-
-                  <span className="font-bold text-right">
-                    {selectedCrust.name}
-                  </span>
-                </div>
-
-                <div className="
-                  flex
-                  justify-between
-                  text-sm
-                ">
-                  <span className="text-[#817C73]">
-                    Toppings
-                  </span>
-
-                  <span className="font-bold">
-                    {selectedToppings.length}
-                  </span>
-                </div>
-              </div>
-            </div>
+            <PizzaPreview
+              size={selectedSize.name}
+              crust={selectedCrust.name}
+              cheese={selectedCheese.name}
+              toppings={selectedToppings}
+            />
           </div>
 
           {/* =================================================
@@ -547,308 +339,60 @@ const PizzaLab = () => {
           ================================================= */}
 
           <div className="space-y-5">
-            {/* Size */}
 
-            <div className="
-              bg-white
-              rounded-[28px]
-              border
-              border-[#E8DFD4]
-              p-5
-              sm:p-6
-              shadow-[0_12px_40px_rgba(50,40,30,0.05)]
-            ">
+            <BuilderCard>
               <SizeSelector
                 sizes={sizes}
                 selectedSize={selectedSize}
                 setSelectedSize={setSelectedSize}
               />
-            </div>
+            </BuilderCard>
 
-            {/* Crust */}
-
-            <div className="
-              bg-white
-              rounded-[28px]
-              border
-              border-[#E8DFD4]
-              p-5
-              sm:p-6
-              shadow-[0_12px_40px_rgba(50,40,30,0.05)]
-            ">
+            <BuilderCard>
               <CrustSelector
                 crusts={crusts}
                 selectedCrust={selectedCrust}
                 setSelectedCrust={setSelectedCrust}
               />
-            </div>
+            </BuilderCard>
 
-            {/* Sauce */}
-
-            <div className="
-              bg-white
-              rounded-[28px]
-              border
-              border-[#E8DFD4]
-              p-5
-              sm:p-6
-              shadow-[0_12px_40px_rgba(50,40,30,0.05)]
-            ">
+            <BuilderCard>
               <SauceSelector
                 sauces={sauces}
                 selectedSauce={selectedSauce}
                 setSelectedSauce={setSelectedSauce}
               />
-            </div>
+            </BuilderCard>
 
-            {/* Cheese */}
-
-            <div className="
-              bg-white
-              rounded-[28px]
-              border
-              border-[#E8DFD4]
-              p-5
-              sm:p-6
-              shadow-[0_12px_40px_rgba(50,40,30,0.05)]
-            ">
+            <BuilderCard>
               <CheeseSelector
                 cheeses={cheeses}
                 selectedCheese={selectedCheese}
                 setSelectedCheese={setSelectedCheese}
               />
-            </div>
+            </BuilderCard>
 
-            {/* Toppings */}
-
-            <div className="
-              bg-white
-              rounded-[28px]
-              border
-              border-[#E8DFD4]
-              p-5
-              sm:p-6
-              shadow-[0_12px_40px_rgba(50,40,30,0.05)]
-            ">
+            <BuilderCard>
               <ToppingsSelector
                 selectedToppings={selectedToppings}
                 setSelectedToppings={
                   setSelectedToppings
                 }
               />
-            </div>
+            </BuilderCard>
 
-            {/* Complexity */}
-
-            <div className="
-              bg-white
-              rounded-[28px]
-              border
-              border-[#E8DFD4]
-              p-5
-              sm:p-6
-            ">
-              <PizzaComplexity
-                toppingCount={
-                  selectedToppings.length
-                }
-              />
-            </div>
+            <PizzaComplexity
+              toppingCount={selectedToppings.length}
+            />
 
             <RecommendedPizza />
           </div>
 
           {/* =================================================
-              RIGHT — SUMMARY
+              RIGHT — ORDER TICKET
           ================================================= */}
 
           <div className="xl:sticky xl:top-24 space-y-5">
-            <div className="
-              rounded-[30px]
-              bg-[#22281F]
-              text-white
-              p-6
-              shadow-[0_20px_60px_rgba(34,40,31,0.20)]
-              overflow-hidden
-              relative
-            ">
-              <div className="
-                absolute
-                -top-20
-                -right-20
-                w-48
-                h-48
-                rounded-full
-                bg-[#D8531F]/20
-                blur-3xl
-              " />
-
-              <div className="
-                relative
-                flex
-                items-center
-                justify-between
-                mb-5
-              ">
-                <div>
-                  <p className="
-                    text-xs
-                    uppercase
-                    tracking-[0.18em]
-                    text-white/50
-                    font-bold
-                  ">
-                    Order Summary
-                  </p>
-
-                  <h2 className="
-                    text-2xl
-                    font-black
-                    mt-1
-                  ">
-                    Your Pizza
-                  </h2>
-                </div>
-
-                <div className="
-                  w-11
-                  h-11
-                  rounded-2xl
-                  bg-white/10
-                  flex
-                  items-center
-                  justify-center
-                ">
-                  <Sparkles
-                    size={19}
-                    className="text-[#F4A27A]"
-                  />
-                </div>
-              </div>
-
-              <div className="
-                relative
-                space-y-2
-                text-sm
-                text-white/65
-              ">
-                <div className="
-                  flex
-                  justify-between
-                ">
-                  <span>Size</span>
-
-                  <span className="
-                    text-white
-                    font-semibold
-                  ">
-                    {selectedSize.name}
-                  </span>
-                </div>
-
-                <div className="
-                  flex
-                  justify-between
-                ">
-                  <span>Crust</span>
-
-                  <span className="
-                    text-white
-                    font-semibold
-                    text-right
-                    max-w-[170px]
-                  ">
-                    {selectedCrust.name}
-                  </span>
-                </div>
-
-                <div className="
-                  flex
-                  justify-between
-                ">
-                  <span>Sauce</span>
-
-                  <span className="
-                    text-white
-                    font-semibold
-                  ">
-                    {selectedSauce.name}
-                  </span>
-                </div>
-
-                <div className="
-                  flex
-                  justify-between
-                ">
-                  <span>Cheese</span>
-
-                  <span className="
-                    text-white
-                    font-semibold
-                  ">
-                    {selectedCheese.name}
-                  </span>
-                </div>
-
-                <div className="
-                  flex
-                  justify-between
-                ">
-                  <span>Toppings</span>
-
-                  <span className="
-                    text-white
-                    font-semibold
-                  ">
-                    {selectedToppings.length}
-                  </span>
-                </div>
-              </div>
-
-              <div className="
-                relative
-                border-t
-                border-white/10
-                mt-5
-                pt-5
-                flex
-                items-end
-                justify-between
-              ">
-                <div>
-                  <p className="
-                    text-xs
-                    uppercase
-                    tracking-wider
-                    text-white/45
-                    font-bold
-                  ">
-                    Total
-                  </p>
-
-                  <p className="
-                    text-4xl
-                    font-black
-                    mt-1
-                  ">
-                    ₹{totalPrice}
-                  </p>
-                </div>
-
-                <div className="
-                  px-3
-                  py-2
-                  rounded-xl
-                  bg-[#D8531F]
-                  text-xs
-                  font-bold
-                ">
-                  Fresh
-                </div>
-              </div>
-            </div>
-
-            {/* Existing detailed summary */}
 
             <SummaryCard
               selectedSize={selectedSize}
@@ -859,8 +403,6 @@ const PizzaLab = () => {
               totalPrice={totalPrice}
             />
 
-            {/* Add to cart */}
-
             <AddToCartButton
               totalPrice={totalPrice}
               selectedSize={selectedSize}
@@ -870,18 +412,37 @@ const PizzaLab = () => {
               selectedToppings={selectedToppings}
             />
 
-            <p className="
-              text-center
-              text-xs
-              text-[#9A958C]
-            ">
-              🔒 Secure checkout · Freshly prepared
-            </p>
+            <div className="flex items-center justify-center gap-2 text-xs text-[#8A7A62]">
+              <ChefHat size={14} />
+              Made fresh, right after you order
+            </div>
+
+            <div className="flex items-center justify-center gap-2 text-xs text-[#6E6151]">
+              <ShoppingBag size={13} />
+              Secure checkout · Freshly prepared
+            </div>
           </div>
         </div>
       </main>
     </motion.div>
   );
 };
+
+/* =========================================================
+   SHARED BUILDER CARD WRAPPER
+   (every step now lives inside the same parchment shell —
+   this is what makes the whole builder feel like one system
+   instead of ten differently-styled components)
+========================================================= */
+
+const BuilderCard = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => (
+  <div className="bg-[#FBF3E4] rounded-[28px] border border-[#E7D9BE] p-5 sm:p-6 shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
+    {children}
+  </div>
+);
 
 export default PizzaLab;

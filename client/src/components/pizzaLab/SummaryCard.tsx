@@ -7,35 +7,26 @@ import {
   Flame,
 } from "lucide-react";
 
-
 interface SummaryCardProps {
-
   selectedSize: {
     name: string;
     price: number;
   };
-
   selectedCrust: {
     name: string;
     price: number;
   };
-
   selectedSauce: {
     name: string;
     price: number;
   };
-
   selectedCheese: {
     name: string;
     price: number;
   };
-
   selectedToppings: string[];
-
   totalPrice?: number;
-
 }
-
 
 const SummaryCard = ({
   selectedSize,
@@ -44,332 +35,155 @@ const SummaryCard = ({
   selectedCheese,
   selectedToppings,
   totalPrice,
-
 }: SummaryCardProps) => {
-
-
   return (
-
     <motion.div
-
-      initial={{
-        opacity: 0,
-        y: 20,
-      }}
-
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-
-      className="
-        bg-gradient-to-br
-        from-orange-50
-        to-white
-        border
-        border-orange-100
-        rounded-3xl
-        p-5
-        shadow-lg
-      "
-
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="relative"
     >
+      {/* ==========================================
+          TICKET BODY
+      ========================================== */}
 
+      <div className="bg-[#FBF3E4] rounded-t-[22px] pt-6 px-6 pb-8 border border-b-0 border-[#E7D9BE] shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
 
-      <div
-        className="
-          flex
-          items-center
-          gap-2
-          mb-4
-        "
-      >
-
-        <Pizza
-          className="text-orange-500"
-          size={22}
-        />
-
-        <h2
-          className="
-            text-lg
-            font-bold
-            text-gray-800
-          "
-        >
-          Pizza Summary
-        </h2>
-
-      </div>
-
-
-
-      <div
-        className="
-          space-y-3
-          text-sm
-        "
-      >
-
-
-        <SummaryItem
-
-          icon={<CircleDot size={16}/>}
-
-          title="Size"
-
-          value={selectedSize.name}
-
-        />
-
-
-
-        <SummaryItem
-
-          icon={<Layers size={16}/>}
-
-          title="Crust"
-
-          value={selectedCrust.name}
-
-        />
-
-
-
-        <SummaryItem
-
-          icon={<Flame size={16}/>}
-
-          title="Sauce"
-
-          value={selectedSauce.name}
-
-        />
-
-
-
-        <SummaryItem
-
-          icon={<Pizza size={16}/>}
-
-          title="Cheese"
-
-          value={selectedCheese.name}
-
-        />
-
-
-
-        {/* Toppings */}
-
-        <div
-          className="
-            flex
-            gap-3
-            items-start
-          "
-        >
-
-          <Leaf
+        <div className="flex items-center justify-between mb-1">
+          <p className="text-[10px] uppercase tracking-[0.22em] text-[#9C8767] font-black">
+            Kitchen Ticket
+          </p>
+          <Flame
             size={16}
-            className="
-              text-green-500
-              mt-1
-            "
+            className="text-[#E5501C]"
           />
-
-
-          <div>
-
-
-            <p
-              className="
-                text-gray-500
-              "
-            >
-              Toppings
-            </p>
-
-
-
-            {
-              selectedToppings.length > 0 ? (
-
-                <div
-                  className="
-                    flex
-                    flex-wrap
-                    gap-2
-                    mt-1
-                  "
-                >
-
-                  {
-                    selectedToppings.map(
-                      (item,index)=>(
-
-                        <span
-
-                          key={index}
-
-                          className="
-                            bg-orange-100
-                            text-orange-700
-                            px-2
-                            py-1
-                            rounded-full
-                            text-xs
-                            font-medium
-                          "
-
-                        >
-
-                          {item}
-
-                        </span>
-
-                      )
-                    )
-                  }
-
-                </div>
-
-              ) : (
-
-                <p
-                  className="
-                    text-gray-400
-                    text-xs
-                  "
-                >
-                  No toppings added
-                </p>
-
-              )
-            }
-
-
-          </div>
-
-
         </div>
 
+        <h2 className="text-2xl font-black text-[#241A12] mb-5">
+          Your Pizza
+        </h2>
 
+        {/* Perforation line */}
+        <div
+          className="h-0 border-t-2 border-dashed border-[#D8C6A3] mb-5"
+        />
 
-        {
-          totalPrice !== undefined && (
+        <div className="space-y-3.5 text-sm">
+          <TicketRow
+            icon={<CircleDot size={15} />}
+            label="Size"
+            value={selectedSize.name}
+          />
 
-            <div
-              className="
-                mt-4
-                pt-3
-                border-t
-                border-orange-100
-                flex
-                justify-between
-                font-bold
-              "
-            >
+          <TicketRow
+            icon={<Layers size={15} />}
+            label="Base"
+            value={selectedCrust.name}
+          />
 
-              <span>
+          <TicketRow
+            icon={<Flame size={15} />}
+            label="Sauce"
+            value={selectedSauce.name}
+          />
+
+          <TicketRow
+            icon={<Pizza size={15} />}
+            label="Cheese"
+            value={selectedCheese.name}
+          />
+
+          {/* Toppings */}
+          <div className="flex gap-3 items-start">
+            <Leaf
+              size={15}
+              className="text-[#5B7F45] mt-0.5 shrink-0"
+            />
+
+            <div className="min-w-0">
+              <p className="text-[#9C8767] font-semibold uppercase text-[11px] tracking-wide">
+                Toppings
+              </p>
+
+              {selectedToppings.length > 0 ? (
+                <div className="flex flex-wrap gap-1.5 mt-1.5">
+                  {selectedToppings.map(
+                    (item, index) => (
+                      <span
+                        key={index}
+                        className="bg-[#F3E8D4] border border-[#E7D9BE] text-[#241A12] px-2 py-0.5 rounded-md text-xs font-bold"
+                      >
+                        {item}
+                      </span>
+                    )
+                  )}
+                </div>
+              ) : (
+                <p className="text-[#B9A88C] text-xs mt-1">
+                  None added
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {totalPrice !== undefined && (
+          <>
+            <div className="h-0 border-t-2 border-dashed border-[#D8C6A3] my-5" />
+
+            <div className="flex items-end justify-between">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-[#9C8767] font-black">
                 Total
               </span>
 
-
-              <span
-                className="
-                  text-orange-600
-                "
-              >
+              <span className="text-3xl font-black text-[#B8431A]">
                 ₹{totalPrice}
               </span>
-
-
             </div>
-
-          )
-        }
-
-
-
+          </>
+        )}
       </div>
 
+      {/* ==========================================
+          TORN TICKET EDGE
+      ========================================== */}
 
+      <div
+        className="h-4 bg-[#FBF3E4] rounded-b-[22px]"
+        style={{
+          maskImage:
+            "repeating-linear-gradient(-45deg, transparent 0 6px, black 6px 12px)",
+          WebkitMaskImage:
+            "repeating-linear-gradient(-45deg, transparent 0 6px, black 6px 12px)",
+        }}
+      />
     </motion.div>
-
   );
-
 };
 
-
-
-const SummaryItem = ({
-
+const TicketRow = ({
   icon,
-
-  title,
-
+  label,
   value,
-
-}:{
-
+}: {
   icon: React.ReactNode;
-
-  title: string;
-
+  label: string;
   value: string;
-
 }) => (
-
-  <div
-    className="
-      flex
-      items-center
-      gap-3
-    "
-  >
-
-    <div
-      className="
-        text-orange-500
-      "
-    >
+  <div className="flex items-center gap-3">
+    <div className="text-[#E5501C] shrink-0">
       {icon}
     </div>
 
-
-    <div
-      className="
-        flex-1
-      "
-    >
-
-      <p
-        className="
-          text-gray-500
-        "
-      >
-        {title}
+    <div className="flex-1 flex items-center justify-between gap-3 min-w-0">
+      <p className="text-[#9C8767] font-semibold uppercase text-[11px] tracking-wide">
+        {label}
       </p>
 
-
-      <p
-        className="
-          font-semibold
-          text-gray-800
-        "
-      >
+      <p className="font-bold text-[#241A12] text-right truncate">
         {value}
       </p>
-
-
     </div>
-
-
   </div>
-
 );
-
-
 
 export default SummaryCard;

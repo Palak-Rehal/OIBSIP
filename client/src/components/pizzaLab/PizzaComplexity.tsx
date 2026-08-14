@@ -1,64 +1,58 @@
 import { motion } from "framer-motion";
+import { Flame } from "lucide-react";
 
 interface Props {
   toppingCount: number;
 }
 
 const PizzaComplexity = ({ toppingCount }: Props) => {
-
   let title = "Beginner";
-  let color = "bg-green-500";
-  let width = "25%";
+  let width = "20%";
 
   if (toppingCount >= 2) {
     title = "Classic";
-    color = "bg-yellow-500";
-    width = "50%";
+    width = "45%";
   }
 
   if (toppingCount >= 4) {
     title = "Gourmet";
-    color = "bg-orange-500";
     width = "75%";
   }
 
   if (toppingCount >= 6) {
     title = "Pizza Monster";
-    color = "bg-red-500";
     width = "100%";
   }
 
   return (
-    <div
-      className="
-      bg-white/5
-      backdrop-blur-xl
-      border
-      border-orange-500/20
-      rounded-[30px]
-      p-8
-      "
-    >
-      <h2 className="text-2xl font-bold mb-4">
-        🍕 Pizza Complexity
-      </h2>
+    <div className="bg-[#FBF3E4] rounded-[28px] border border-[#E7D9BE] p-5 sm:p-6 shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
 
-      <p className="text-gray-400 mb-6">
-        {title}
-      </p>
+      <div className="flex items-center gap-3 mb-4">
+        <span className="w-9 h-9 shrink-0 rounded-xl bg-[#F0A93E] text-[#1C1712] flex items-center justify-center">
+          <Flame size={18} />
+        </span>
 
-      <div className="w-full h-4 bg-gray-700 rounded-full overflow-hidden">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#9C8767] font-bold">
+            Build Level
+          </p>
+          <h3 className="text-xl font-black text-[#241A12] mt-0.5">
+            {title}
+          </h3>
+        </div>
+      </div>
 
+      <div className="w-full h-3 bg-[#E7D9BE] rounded-full overflow-hidden">
         <motion.div
           animate={{ width }}
           transition={{ duration: 0.5 }}
-          className={`${color} h-full rounded-full`}
+          className="h-full rounded-full bg-gradient-to-r from-[#F0A93E] to-[#E5501C]"
         />
-
       </div>
 
-      <p className="text-sm text-gray-500 mt-4">
-        {toppingCount} toppings selected
+      <p className="text-sm text-[#6B5D4F] mt-3">
+        {toppingCount} topping
+        {toppingCount === 1 ? "" : "s"} selected
       </p>
     </div>
   );

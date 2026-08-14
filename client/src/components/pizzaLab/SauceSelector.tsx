@@ -20,23 +20,21 @@ const SauceSelector = ({
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
-        <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-[#9A958C] font-bold">
-            Step 03
-          </p>
+      <div className="flex items-center gap-3 mb-5">
+        <span className="w-9 h-9 shrink-0 rounded-xl bg-[#E5501C] text-[#FBF3E4] font-black text-sm flex items-center justify-center">
+          3
+        </span>
 
-          <h3 className="text-xl font-black text-[#22281F] mt-1">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#9C8767] font-bold">
+            Step 3 of 5
+          </p>
+          <h3 className="text-xl font-black text-[#241A12] mt-0.5">
             Choose Your Sauce
           </h3>
         </div>
-
-        <span className="text-sm font-semibold text-[#D8531F]">
-          {selectedSauce.name}
-        </span>
       </div>
 
-      {/* Sauce Options */}
       <div className="grid sm:grid-cols-2 gap-3">
         {sauces.map((sauce) => {
           const isSelected =
@@ -49,65 +47,46 @@ const SauceSelector = ({
               whileTap={{ scale: 0.97 }}
               onClick={() => setSelectedSauce(sauce)}
               className={`
-                relative
-                flex
-                items-center
-                justify-between
-                p-4
-                rounded-2xl
-                border
-                text-left
-                transition-all
-                duration-200
-
+                relative flex items-center justify-between p-4 rounded-2xl border
+                text-left transition-all duration-200
                 ${
                   isSelected
-                    ? `
-                      bg-[#FCE4D6]
-                      border-[#D8531F]
-                      shadow-md
-                    `
-                    : `
-                      bg-[#FAF9F6]
-                      border-[#E8DFD4]
-                      hover:bg-white
-                      hover:border-[#D8531F]/50
-                    `
+                    ? "bg-[#241A12] border-[#241A12] shadow-md"
+                    : "bg-[#F3E8D4] border-[#E7D9BE] hover:bg-white hover:border-[#E5501C]/50"
                 }
               `}
             >
               <div>
                 <p
-                  className={`
-                    font-bold
-                    ${
-                      isSelected
-                        ? "text-[#B8431A]"
-                        : "text-[#22281F]"
-                    }
-                  `}
+                  className={`font-bold ${
+                    isSelected
+                      ? "text-[#FBF3E4]"
+                      : "text-[#241A12]"
+                  }`}
                 >
                   {sauce.name}
                 </p>
 
-                <p className="text-xs text-[#817C73] mt-1">
+                <p
+                  className={`text-xs mt-1 ${
+                    isSelected
+                      ? "text-[#B9A88C]"
+                      : "text-[#6B5D4F]"
+                  }`}
+                >
                   {sauce.price === 0
-                    ? "Classic flavour"
+                    ? "House classic"
                     : "Premium sauce"}
                 </p>
               </div>
 
               <div className="flex items-center gap-3">
                 <span
-                  className={`
-                    text-sm
-                    font-black
-                    ${
-                      isSelected
-                        ? "text-[#D8531F]"
-                        : "text-[#22281F]"
-                    }
-                  `}
+                  className={`text-sm font-black ${
+                    isSelected
+                      ? "text-[#F0A93E]"
+                      : "text-[#B8431A]"
+                  }`}
                 >
                   {sauce.price === 0
                     ? "Free"
@@ -115,20 +94,8 @@ const SauceSelector = ({
                 </span>
 
                 {isSelected && (
-                  <span className="
-                    w-6
-                    h-6
-                    rounded-full
-                    bg-[#D8531F]
-                    text-white
-                    flex
-                    items-center
-                    justify-center
-                  ">
-                    <Check
-                      size={14}
-                      strokeWidth={3}
-                    />
+                  <span className="w-6 h-6 rounded-full bg-[#E5501C] text-[#FBF3E4] flex items-center justify-center">
+                    <Check size={14} strokeWidth={3} />
                   </span>
                 )}
               </div>

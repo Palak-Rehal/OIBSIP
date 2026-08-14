@@ -21,20 +21,19 @@ const SizeSelector = ({
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
-        <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-[#9A958C] font-bold">
-            Step 01
-          </p>
+      <div className="flex items-center gap-3 mb-5">
+        <span className="w-9 h-9 shrink-0 rounded-xl bg-[#E5501C] text-[#FBF3E4] font-black text-sm flex items-center justify-center">
+          1
+        </span>
 
-          <h3 className="text-xl font-black text-[#22281F] mt-1">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#9C8767] font-bold">
+            Step 1 of 5
+          </p>
+          <h3 className="text-xl font-black text-[#241A12] mt-0.5">
             Choose Your Size
           </h3>
         </div>
-
-        <span className="text-sm font-semibold text-[#D8531F]">
-          {selectedSize.name}
-        </span>
       </div>
 
       {/* Sizes */}
@@ -50,78 +49,46 @@ const SizeSelector = ({
               whileTap={{ scale: 0.97 }}
               onClick={() => setSelectedSize(size)}
               className={`
-                relative
-                text-left
-                p-4
-                rounded-2xl
-                border
-                transition-all
-                duration-200
+                relative text-left p-4 rounded-2xl border transition-all duration-200
                 ${
                   isSelected
-                    ? `
-                      bg-[#FCE4D6]
-                      border-[#D8531F]
-                      shadow-md
-                    `
-                    : `
-                      bg-[#FAF9F6]
-                      border-[#E8DFD4]
-                      hover:border-[#D8531F]/50
-                      hover:bg-white
-                    `
+                    ? "bg-[#241A12] border-[#241A12] shadow-md"
+                    : "bg-[#F3E8D4] border-[#E7D9BE] hover:border-[#E5501C]/50 hover:bg-white"
                 }
               `}
             >
-              {/* Selected check */}
               {isSelected && (
-                <span
-                  className="
-                    absolute
-                    top-3
-                    right-3
-                    w-6
-                    h-6
-                    rounded-full
-                    bg-[#D8531F]
-                    text-white
-                    flex
-                    items-center
-                    justify-center
-                  "
-                >
+                <span className="absolute top-3 right-3 w-6 h-6 rounded-full bg-[#E5501C] text-[#FBF3E4] flex items-center justify-center">
                   <Check size={14} strokeWidth={3} />
                 </span>
               )}
 
               <p
-                className={`
-                  text-lg
-                  font-black
-                  ${
-                    isSelected
-                      ? "text-[#B8431A]"
-                      : "text-[#22281F]"
-                  }
-                `}
+                className={`text-lg font-black ${
+                  isSelected
+                    ? "text-[#FBF3E4]"
+                    : "text-[#241A12]"
+                }`}
               >
                 {size.name}
               </p>
 
-              <p className="text-xs text-[#817C73] mt-1">
+              <p
+                className={`text-xs mt-1 ${
+                  isSelected
+                    ? "text-[#B9A88C]"
+                    : "text-[#6B5D4F]"
+                }`}
+              >
                 {size.description}
               </p>
 
               <p
-                className={`
-                  mt-3
-                  font-black
-                  ${
-                    isSelected
-                      ? "text-[#D8531F]"
-                      : "text-[#22281F]"
-                  }
-                `}
+                className={`mt-3 font-black ${
+                  isSelected
+                    ? "text-[#F0A93E]"
+                    : "text-[#241A12]"
+                }`}
               >
                 ₹{size.price}
               </p>
